@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stock & POS — Central Kitchen</title>
+<link rel="icon" href="data:image/png;base64,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">
+<link rel="apple-touch-icon" href="data:image/png;base64,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">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Stock &amp; POS">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#10151c">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#EFEDE6; --panel:#fff; --border:#e2ded3; --ink:#10151c; --muted:#6b7280; --faint:#9ca3af;
+  --accent:#0d9488; --accent-dark:#0f766e; --accent-lt:#ccfbf1;
+  --b1:#4f46e5; --b1-lt:#e0e7ff;
+  --b2:#d97706; --b2-lt:#fef3c7;
+  --warn:#d97706; --danger:#dc2626; --success:#16a34a;
+}
+body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;font-size:14px}
+.hidden{display:none !important}
+
+/* ── Login / Setup ── */
+.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.auth-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:36px 34px;width:100%;max-width:380px;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.auth-brand{font-family:monospace;font-weight:700;font-size:20px;letter-spacing:-0.5px;margin-bottom:2px;display:flex;align-items:center;gap:8px}
+.auth-brand .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);display:inline-block}
+.auth-sub{font-size:12px;color:var(--muted);margin-bottom:26px}
+.auth-fld{margin-bottom:14px;display:flex;flex-direction:column;gap:5px}
+.auth-fld label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;color:var(--faint)}
+.auth-fld input{height:40px;border:1px solid var(--border);border-radius:7px;padding:0 12px;font-size:14px;font-family:inherit;background:#fff}
+.auth-fld input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(13,148,136,0.1)}
+.auth-btn{width:100%;height:42px;border-radius:7px;border:none;background:var(--ink);color:#fff;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;cursor:pointer;margin-top:6px}
+.auth-btn:hover{background:#000}
+.auth-err{background:#fef2f2;border:1px solid #fca5a5;color:#991b1b;font-size:12px;padding:9px 12px;border-radius:6px;margin-bottom:14px}
+.auth-hint{font-size:11px;color:var(--faint);margin-top:18px;line-height:1.5;text-align:center}
+.role-pick{display:flex;gap:8px;margin-bottom:18px}
+.role-opt{flex:1;border:1px solid var(--border);border-radius:8px;padding:10px 6px;text-align:center;cursor:pointer;font-size:11px;font-weight:700;color:var(--muted);transition:all .1s}
+.role-opt.active{border-color:var(--ink);color:var(--ink);background:#f5f3ed}
+
+/* ── App shell ── */
+.app{display:none;min-height:100vh;flex-direction:column}
+.app.on{display:flex}
+.hdr{background:var(--ink);color:#fff;display:flex;align-items:center;gap:12px;padding:0 20px;height:54px;flex-shrink:0;position:sticky;top:0;z-index:200}
+.hdr-brand{font-family:monospace;font-weight:700;font-size:16px;letter-spacing:-0.5px;white-space:nowrap;display:flex;align-items:center;gap:7px}
+.hdr-brand .dot{width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.hdr-sep{width:1px;height:24px;background:rgba(255,255,255,0.12)}
+.hdr-date{background:#1f2937;color:#fff;border:1px solid rgba(255,255,255,0.15);border-radius:6px;padding:5px 10px;font-size:12px;font-family:inherit}
+.hdr-spacer{flex:1}
+.hdr-user{font-size:12px;color:rgba(255,255,255,0.6);white-space:nowrap}
+.hdr-user b{color:#fff}
+.hdr-role-tag{font-size:9px;font-weight:700;text-transform:uppercase;padding:2px 7px;border-radius:3px;letter-spacing:0.5px}
+.hdr-btn{height:30px;padding:0 12px;border-radius:5px;border:1px solid rgba(255,255,255,0.2);background:transparent;color:rgba(255,255,255,0.7);font-size:10px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;cursor:pointer;font-family:inherit;white-space:nowrap}
+.hdr-btn:hover{background:rgba(255,255,255,0.1);color:#fff}
+
+.tabbar{background:var(--ink);border-bottom:1px solid rgba(255,255,255,0.08);padding:0 20px;display:flex;overflow-x:auto;flex-shrink:0}
+.tab{padding:11px 14px;color:rgba(255,255,255,0.4);font-size:10px;font-weight:700;letter-spacing:0.6px;text-transform:uppercase;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;user-select:none}
+.tab:hover{color:rgba(255,255,255,0.75)}
+.tab.on{color:var(--accent);border-bottom-color:var(--accent)}
+
+.content{padding:22px;max-width:1180px;margin:0 auto;width:100%}
+.panel{display:none}.panel.on{display:block}
+
+.pg-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;gap:12px;flex-wrap:wrap}
+.pg-title{font-size:18px;font-weight:700}
+.pg-sub{font-size:12px;color:var(--muted);margin-top:3px}
+
+.stats{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.stat{background:#fff;border:1px solid var(--border);border-radius:8px;padding:12px 16px;flex:1;min-width:110px}
+.stat-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;color:var(--faint);margin-bottom:4px}
+.stat-val{font-size:21px;font-weight:700;font-family:monospace;line-height:1}
+.stat-sub{font-size:10px;color:var(--faint);margin-top:3px}
+
+.card{background:#fff;border:1px solid var(--border);border-radius:9px;margin-bottom:14px}
+.card-body{padding:18px 20px}
+.card-hdr{display:flex;justify-content:space-between;align-items:center;padding:13px 20px;border-bottom:1px solid #f0ede5;flex-wrap:wrap;gap:8px}
+.card-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#374151}
+
+.form-row{display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap}
+.fld{display:flex;flex-direction:column;gap:3px}
+.fld label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;color:var(--faint)}
+.fld input,.fld select{height:34px;border:1px solid var(--border);border-radius:5px;padding:0 10px;font-size:13px;font-family:inherit;background:#fff;min-width:120px}
+.fld input:focus,.fld select:focus{outline:none;border-color:var(--ink)}
+.fld input[type=number]{font-family:monospace}
+
+.btn{height:34px;padding:0 14px;border-radius:5px;border:1px solid;cursor:pointer;font-size:10px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;font-family:inherit;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.btn-primary{background:var(--ink);color:#fff;border-color:var(--ink)}.btn-primary:hover{background:#000}
+.btn-accent{background:var(--accent);color:#fff;border-color:var(--accent)}.btn-accent:hover{background:var(--accent-dark)}
+.btn-secondary{background:transparent;color:#374151;border-color:#d4d0c8}.btn-secondary:hover{background:#f5f3ed}
+.btn-danger{background:transparent;color:#dc2626;border-color:#fca5a5}.btn-danger:hover{background:#fef2f2}
+.btn-success{background:transparent;color:#16a34a;border-color:#86efac}.btn-success:hover{background:#f0fdf4}
+.btn-xs{height:27px;padding:0 9px;font-size:9px}
+
+table{width:100%;border-collapse:collapse;font-size:12px}
+.tbl-wrap{overflow-x:auto}
+th{background:#f9f8f4;color:#6b7280;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;padding:8px 12px;text-align:left;white-space:nowrap;border-bottom:1px solid #ede9e0}
+td{padding:9px 12px;border-bottom:1px solid #f5f2ea;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:#fcfbf8}
+.n{text-align:right;font-family:monospace}
+.td-acts{text-align:right;white-space:nowrap}
+.tbl-inp{border:1px solid var(--border);border-radius:4px;height:28px;padding:0 7px;font-size:12px;font-family:monospace;background:#fff;text-align:right;width:80px}
+.tbl-inp:focus{outline:none;border-color:var(--ink)}
+.tr-warn td{background:#fff7ed !important}
+.tr-danger td{background:#fef2f2 !important}
+
+.badge{display:inline-block;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;padding:2px 7px;border-radius:3px;white-space:nowrap}
+.b-owner{background:#e5e7eb;color:#374151}
+.b-b1{background:var(--b1-lt);color:var(--b1)}
+.b-b2{background:var(--b2-lt);color:var(--b2)}
+.b-ok{background:#dcfce7;color:#14532d}
+.b-warn{background:#fef3c7;color:#92400e}
+.b-danger{background:#fee2e2;color:#991b1b}
+
+.notice{padding:10px 14px;border-radius:6px;font-size:12px;display:flex;align-items:flex-start;gap:8px;margin-bottom:14px}
+.n-info{background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af}
+.n-warn{background:#fffbeb;border:1px solid #fcd34d;color:#92400e}
+.n-danger{background:#fef2f2;border:1px solid #fca5a5;color:#991b1b}
+.n-success{background:#f0fdf4;border:1px solid #86efac;color:#14532d}
+
+.code{font-family:monospace;color:var(--faint);letter-spacing:1px}
+.empty{padding:36px 20px;text-align:center;color:var(--faint)}
+.empty-title{font-size:13px;font-weight:600;color:var(--muted);margin-bottom:4px}
+
+/* split bar signature element for stock master */
+.splitbar{height:20px;border-radius:4px;overflow:hidden;display:flex;width:100%;min-width:160px;background:#f0ede5}
+.splitbar .seg1{background:var(--b1);display:flex;align-items:center;justify-content:center;font-size:9px;color:#fff;font-family:monospace;font-weight:700;white-space:nowrap;overflow:hidden}
+.splitbar .seg2{background:var(--b2);display:flex;align-items:center;justify-content:center;font-size:9px;color:#fff;font-family:monospace;font-weight:700;white-space:nowrap;overflow:hidden}
+
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;z-index:500;padding:20px}
+.modal{background:#fff;border-radius:10px;max-width:420px;width:100%;max-height:85vh;overflow:auto}
+.modal-hdr{padding:16px 20px;border-bottom:1px solid var(--border);font-weight:700;font-size:14px;display:flex;justify-content:space-between;align-items:center}
+.modal-body{padding:18px 20px}
+.modal-x{cursor:pointer;color:var(--faint);font-size:18px;line-height:1}
+</style>
+</head>
+<body>
+
+<!-- ═══ AUTH SCREEN ═══ -->
+<div id="screen-auth" class="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-brand"><span class="dot"></span><span id="auth-brand-name">Stock & POS</span></div>
+    <div class="auth-sub" id="auth-sub">Central kitchen stock & branch POS tracking</div>
+
+    <!-- first run setup -->
+    <div id="setup-block">
+      <div class="auth-fld"><label>Business name</label><input id="su-biz" placeholder="e.g. Dapur Beku"></div>
+      <div class="auth-fld"><label>Owner username</label><input id="su-user" placeholder="owner"></div>
+      <div class="auth-fld"><label>Owner password</label><input id="su-pass" type="password" placeholder="min 4 characters"></div>
+      <div class="auth-fld"><label>Confirm password</label><input id="su-pass2" type="password"></div>
+      <div id="setup-err" class="auth-err hidden"></div>
+      <button class="auth-btn" onclick="doSetup()">Create owner account</button>
+      <div class="auth-hint">This creates the Owner login. You can add Branch 1 and Branch 2 employee logins afterwards from the Users tab.</div>
+    </div>
+
+    <!-- login -->
+    <div id="login-block" class="hidden">
+      <div class="auth-fld"><label>Username</label><input id="li-user" placeholder="username"></div>
+      <div class="auth-fld"><label>Password</label><input id="li-pass" type="password" placeholder="password"></div>
+      <div id="login-err" class="auth-err hidden"></div>
+      <button class="auth-btn" onclick="doLogin()">Log in</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ APP ═══ -->
+<div id="app" class="app">
+  <div class="hdr">
+    <div class="hdr-brand"><span class="dot"></span><span id="hdr-brand"></span></div>
+    <div class="hdr-sep"></div>
+    <input type="date" id="hdr-date" class="hdr-date" onchange="onDateChange()">
+    <span id="hdr-sync" style="font-size:11px;color:rgba(255,255,255,0.55);white-space:nowrap"></span>
+    <div class="hdr-spacer"></div>
+    <div class="hdr-user">Signed in as <b id="hdr-username"></b></div>
+    <span id="hdr-role-tag" class="hdr-role-tag"></span>
+    <button class="hdr-btn" onclick="logout()">Log out</button>
+  </div>
+  <div class="tabbar" id="tabbar"></div>
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div class="panel" id="panel-dash">
+      <div class="pg-hdr"><div><div class="pg-title">Dashboard</div><div class="pg-sub" id="dash-date-lbl"></div></div></div>
+      <div id="dash-body"></div>
+    </div>
+
+    <!-- STOCK MASTER (owner) -->
+    <div class="panel" id="panel-master">
+      <div class="pg-hdr">
+        <div><div class="pg-title">Stock Master</div><div class="pg-sub">Branch 1 (central kitchen) enters today's production and how much stays at Branch 1. The remainder automatically becomes Branch 2 stock. Any leftover stock from yesterday (based on that branch's opname count) is automatically added on top — shown as "carried B1/B2" badges below. Owner can review or override any of these numbers here too.</div></div>
+      </div>
+      <div id="master-notice"></div>
+      <div class="card">
+        <div class="card-hdr"><div class="card-title">Production & Allocation</div></div>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>Menu</th><th class="n">Produced (pcs)</th><th class="n">Kept — Branch 1</th><th class="n">Remainder — Branch 2</th><th>Split</th></tr></thead>
+          <tbody id="master-tbody"></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- MENUS (owner) -->
+    <div class="panel" id="panel-menus">
+      <div class="pg-hdr"><div><div class="pg-title">Menu Items</div><div class="pg-sub">Manage the list of menu items produced by the central kitchen.</div></div></div>
+      <div class="card"><div class="card-body">
+        <div class="form-row">
+          <div class="fld"><label>Menu name</label><input id="new-menu-name" placeholder="e.g. Chicken Nugget 250g"></div>
+          <button class="btn btn-primary" onclick="addMenu()">+ Add Menu</button>
+        </div>
+      </div></div>
+      <div class="card"><div class="tbl-wrap"><table>
+        <thead><tr><th>Menu</th><th class="td-acts">Actions</th></tr></thead>
+        <tbody id="menus-tbody"></tbody>
+      </table></div></div>
+    </div>
+
+    <!-- POS (branch1 / branch2 share same template, id-suffixed) -->
+    <div class="panel" id="panel-pos1"></div>
+    <div class="panel" id="panel-pos2"></div>
+
+    <!-- OPNAME (branch1 / branch2) -->
+    <div class="panel" id="panel-opname1"></div>
+    <div class="panel" id="panel-opname2"></div>
+
+    <!-- USERS (owner) -->
+    <div class="panel" id="panel-users">
+      <div class="pg-hdr"><div><div class="pg-title">Users & Logins</div><div class="pg-sub">Create logins for Branch 1 and Branch 2 employees. Each person should have their own username.</div></div></div>
+      <div class="card"><div class="card-body">
+        <div class="form-row">
+          <div class="fld"><label>Name</label><input id="nu-name" placeholder="Employee name"></div>
+          <div class="fld"><label>Username</label><input id="nu-user" placeholder="username"></div>
+          <div class="fld"><label>Password</label><input id="nu-pass" placeholder="password"></div>
+          <div class="fld"><label>Role</label>
+            <select id="nu-role"><option value="branch1">Branch 1 employee</option><option value="branch2">Branch 2 employee</option></select>
+          </div>
+          <button class="btn btn-primary" onclick="addUser()">+ Add Login</button>
+        </div>
+      </div></div>
+      <div class="card"><div class="tbl-wrap"><table>
+        <thead><tr><th>Name</th><th>Username</th><th>Role</th><th>Password</th><th class="td-acts">Actions</th></tr></thead>
+        <tbody id="users-tbody"></tbody>
+      </table></div></div>
+    </div>
+
+    <!-- BACKUP & SYNC (owner) -->
+    <div class="panel" id="panel-backup">
+      <div class="pg-hdr"><div><div class="pg-title">Backup & Sync</div><div class="pg-sub">By default this app only stores data in this browser. Connect Google Drive so Owner, Branch 1 and Branch 2 stay in sync automatically.</div></div></div>
+
+      <div class="card">
+        <div class="card-hdr"><div class="card-title">Google Drive Sync</div><span id="gsync-status"></span></div>
+        <div class="card-body">
+          <div class="notice n-info">Sign in with the <b>same Google account on every device</b> (Owner, Branch 1, Branch 2) — that's what lets them all reach the same data file. Once connected, changes sync automatically about every 15 seconds, and right after you make an edit.</div>
+          <div class="form-row" style="margin-bottom:12px">
+            <div class="fld" style="flex:1;min-width:260px"><label>Google OAuth Client ID</label><input id="gc-clientid" placeholder="xxxxxxxxxx.apps.googleusercontent.com"></div>
+            <button class="btn btn-secondary" onclick="gSaveClientId()">Save Client ID</button>
+          </div>
+          <div id="gsync-connect-btn"><button class="btn btn-accent" onclick="gConnect()">🔗 Connect Google Drive</button></div>
+          <div id="gsync-connected-row" class="hidden" style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn btn-secondary" onclick="performSync()">↻ Sync now</button>
+            <button class="btn btn-danger" onclick="gDisconnect()">Disconnect</button>
+          </div>
+          <div class="auth-hint" style="text-align:left;margin-top:14px">Need a Client ID? In Google Cloud Console, create a project → enable the Google Drive API → create an OAuth Client ID (type: Web application) → add the URL where this file is hosted under "Authorized JavaScript origins". Google sign-in requires this file to be hosted at an http/https address — it won't work opened directly as a local file.</div>
+        </div>
+      </div>
+
+      <div class="card"><div class="card-hdr"><div class="card-title">Manual Backup (offline fallback)</div></div>
+      <div class="card-body">
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-accent" onclick="exportData()">⬇ Export Backup (.json)</button>
+          <label class="btn btn-secondary" style="cursor:pointer">⬆ Import Backup<input type="file" accept=".json" onchange="importData(event)" style="display:none"></label>
+        </div>
+      </div></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════
+const SK='stockpos_state_v1';
+function todayStr(){ const d=new Date(); const p=n=>String(n).padStart(2,'0'); return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`; }
+function uid(){ return Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4); }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function defaultState(){ return { businessName:'', users:[], menus:[], days:{}, tomb:{menu:[],user:[],tx:[]} }; }
+let state = loadState();
+function loadState(){
+  try{ const r=localStorage.getItem(SK); if(r) return Object.assign(defaultState(), JSON.parse(r)); }catch(e){}
+  return defaultState();
+}
+function save(){ try{ localStorage.setItem(SK, JSON.stringify(state)); }catch(e){} scheduleSync(); }
+
+function normalizeTx(t){
+  if(!t.items){ t.items=[{menuId:t.menuId, qty:t.qty}]; }
+  return t;
+}
+function emptyDay(){ return { production:{},production_ts:{}, alloc1:{},alloc1_ts:{}, tx1:[], tx2:[], opname1:{},opname1_ts:{}, opname2:{},opname2_ts:{}, carryOv1:{},carryOv1_ts:{}, carryOv2:{},carryOv2_ts:{} }; }
+function getDay(dateStr){
+  if(!state.days[dateStr]) state.days[dateStr] = emptyDay();
+  const d = state.days[dateStr];
+  d.production=d.production||{}; d.production_ts=d.production_ts||{};
+  d.alloc1=d.alloc1||{}; d.alloc1_ts=d.alloc1_ts||{};
+  d.tx1=(d.tx1||[]).map(normalizeTx); d.tx2=(d.tx2||[]).map(normalizeTx);
+  d.opname1=d.opname1||{}; d.opname1_ts=d.opname1_ts||{};
+  d.opname2=d.opname2||{}; d.opname2_ts=d.opname2_ts||{};
+  d.carryOv1=d.carryOv1||{}; d.carryOv1_ts=d.carryOv1_ts||{};
+  d.carryOv2=d.carryOv2||{}; d.carryOv2_ts=d.carryOv2_ts||{};
+  return d;
+}
+let currentDate = todayStr();
+
+// ═══════════════════════════════════════════════
+// CALCULATIONS
+// ═══════════════════════════════════════════════
+function produced(day,mId){ return Number(day.production[mId])||0; }
+function alloc1(day,mId){ return Number(day.alloc1[mId])||0; }
+function alloc2(day,mId){ return Math.max(0, produced(day,mId)-alloc1(day,mId)); }
+function sold(list,mId){ return list.reduce((s,t)=>s + (t.items||[]).filter(i=>i.menuId===mId).reduce((s2,i)=>s2+(Number(i.qty)||0),0), 0); }
+function txTotalQty(t){ return (t.items||[]).reduce((s,i)=>s+(Number(i.qty)||0),0); }
+function totalSoldDay(list){ return list.reduce((s,t)=>s+txTotalQty(t),0); }
+function baseQty(dateStr,branch,mId){
+  const day=getDay(dateStr);
+  const alloc = branch==='1'?alloc1(day,mId):alloc2(day,mId);
+  return alloc + carryIn(dateStr,branch,mId);
+}
+function txList(day,branch){ return branch==='1'?day.tx1:day.tx2; }
+function remaining(dateStr,branch,mId){ const day=getDay(dateStr); return baseQty(dateStr,branch,mId) - sold(txList(day,branch),mId); }
+function menuName(mId){ const m=state.menus.find(x=>x.id===mId); return m?m.name:'(deleted menu)'; }
+
+// ── carryover: yesterday's leftover becomes today's opening stock on top of new allocation ──
+function prevDateStr(dateStr){
+  const d=new Date(dateStr+'T00:00:00');
+  d.setDate(d.getDate()-1);
+  const p=n=>String(n).padStart(2,'0');
+  return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`;
+}
+function opnameVal(dateStr,branch,mId){
+  const day=state.days[dateStr]; if(!day) return undefined;
+  const key=branch==='1'?'opname1':'opname2';
+  const rec=(day[key]||{})[mId];
+  return (rec===undefined||rec===null||rec==='')?undefined:Number(rec);
+}
+// leftover at end of dateStr: physical opname count if it was taken, otherwise the system-calculated remaining
+function leftover(dateStr,branch,mId){
+  if(!state.days[dateStr]) return 0;
+  const op=opnameVal(dateStr,branch,mId);
+  return op!==undefined ? op : remaining(dateStr,branch,mId);
+}
+function carryOverrideVal(dateStr,branch,mId){
+  const day=getDay(dateStr);
+  const key=branch==='1'?'carryOv1':'carryOv2';
+  const rec=day[key][mId];
+  return (rec===undefined||rec===null||rec==='')?undefined:Number(rec);
+}
+function carryIn(dateStr,branch,mId){
+  const ov=carryOverrideVal(dateStr,branch,mId);
+  if(ov!==undefined) return Math.max(0,ov);
+  const prev=prevDateStr(dateStr);
+  if(!state.days[prev]) return 0;
+  return Math.max(0, leftover(prev,branch,mId));
+}
+function setCarryOverride(branch,mId,val){
+  const day=getDay(currentDate);
+  const key=branch==='1'?'carryOv1':'carryOv2';
+  day[key][mId] = val===''? undefined : Number(val);
+  day[key+'_ts'][mId] = Date.now();
+  save(); renderMaster();
+}
+function resetCarryOverride(branch,mId){
+  const day=getDay(currentDate);
+  const key=branch==='1'?'carryOv1':'carryOv2';
+  day[key][mId] = undefined;
+  day[key+'_ts'][mId] = Date.now();
+  save(); renderMaster();
+}
+
+// ═══════════════════════════════════════════════
+// AUTH
+// ═══════════════════════════════════════════════
+function currentUser(){
+  const id = sessionStorage.getItem('cu_id');
+  return state.users.find(u=>u.id===id) || null;
+}
+function roleLabel(role){ return role==='owner'?'Owner':role==='branch1'?'Branch 1':'Branch 2'; }
+function roleTagClass(role){ return role==='owner'?'b-owner':role==='branch1'?'b-b1':'b-b2'; }
+
+function doSetup(){
+  const biz=document.getElementById('su-biz').value.trim();
+  const user=document.getElementById('su-user').value.trim();
+  const pass=document.getElementById('su-pass').value;
+  const pass2=document.getElementById('su-pass2').value;
+  const errEl=document.getElementById('setup-err');
+  function err(msg){ errEl.textContent=msg; errEl.classList.remove('hidden'); }
+  if(!biz){ err('Please enter a business name.'); return; }
+  if(!user){ err('Please enter an owner username.'); return; }
+  if(pass.length<4){ err('Password must be at least 4 characters.'); return; }
+  if(pass!==pass2){ err('Passwords do not match.'); return; }
+  state.businessName=biz;
+  state.users.push({ id:uid(), name:'Owner', username:user, password:pass, role:'owner', updatedAt:Date.now() });
+  save();
+  sessionStorage.setItem('cu_id', state.users[0].id);
+  boot();
+}
+function doLogin(){
+  const user=document.getElementById('li-user').value.trim();
+  const pass=document.getElementById('li-pass').value;
+  const errEl=document.getElementById('login-err');
+  const u = state.users.find(x=>x.username.toLowerCase()===user.toLowerCase() && x.password===pass);
+  if(!u){ errEl.textContent='Incorrect username or password.'; errEl.classList.remove('hidden'); return; }
+  sessionStorage.setItem('cu_id', u.id);
+  boot();
+}
+function logout(){ sessionStorage.removeItem('cu_id'); boot(); }
+
+// ═══════════════════════════════════════════════
+// TABS / NAV
+// ═══════════════════════════════════════════════
+const TAB_DEFS = [
+  {id:'dash', label:'Dashboard', roles:['owner','branch1','branch2']},
+  {id:'master', label:'Stock Master', roles:['owner','branch1']},
+  {id:'menus', label:'Menu Items', roles:['owner']},
+  {id:'pos1', label:'Branch 1 — POS', roles:['owner','branch1']},
+  {id:'pos2', label:'Branch 2 — POS', roles:['owner','branch2']},
+  {id:'opname1', label:'Branch 1 — Opname', roles:['owner','branch1']},
+  {id:'opname2', label:'Branch 2 — Opname', roles:['owner','branch2']},
+  {id:'users', label:'Users', roles:['owner']},
+  {id:'backup', label:'Backup', roles:['owner']},
+];
+let activeTab='dash';
+function renderTabs(){
+  const u=currentUser(); if(!u) return;
+  const bar=document.getElementById('tabbar');
+  const visible = TAB_DEFS.filter(t=>t.roles.includes(u.role));
+  if(!visible.find(t=>t.id===activeTab)) activeTab=visible[0].id;
+  bar.innerHTML = visible.map(t=>`<div class="tab ${t.id===activeTab?'on':''}" onclick="showTab('${t.id}')">${t.label}</div>`).join('');
+}
+function showTab(id){
+  activeTab=id;
+  document.querySelectorAll('.tab').forEach((el,i)=>{});
+  renderTabs();
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  const p=document.getElementById('panel-'+id); if(p) p.classList.add('on');
+  renderActivePanel();
+}
+function renderActivePanel(){
+  if(activeTab==='dash') renderDash();
+  else if(activeTab==='master') renderMaster();
+  else if(activeTab==='menus') renderMenus();
+  else if(activeTab==='pos1') renderPOS('1');
+  else if(activeTab==='pos2') renderPOS('2');
+  else if(activeTab==='opname1') renderOpname('1');
+  else if(activeTab==='opname2') renderOpname('2');
+  else if(activeTab==='users') renderUsers();
+  else if(activeTab==='backup') renderBackup();
+}
+
+// ═══════════════════════════════════════════════
+// HEADER / DATE
+// ═══════════════════════════════════════════════
+function onDateChange(){
+  currentDate = document.getElementById('hdr-date').value || todayStr();
+  renderActivePanel();
+}
+
+// ═══════════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════════
+function renderDash(){
+  const u=currentUser();
+  document.getElementById('dash-date-lbl').textContent = fmtDate(currentDate) + (currentDate===todayStr()?' (today)':'');
+  const day=getDay(currentDate);
+  const body=document.getElementById('dash-body');
+  if(u.role==='owner'){
+    const menus=state.menus;
+    const totProd=menus.reduce((s,m)=>s+produced(day,m.id),0);
+    const totAvail1=menus.reduce((s,m)=>s+baseQty(currentDate,'1',m.id),0);
+    const totAvail2=menus.reduce((s,m)=>s+baseQty(currentDate,'2',m.id),0);
+    const sold1=menus.reduce((s,m)=>s+sold(day.tx1,m.id),0);
+    const sold2=menus.reduce((s,m)=>s+sold(day.tx2,m.id),0);
+    const discs1=getDiscrepancies(currentDate,'1').map(d=>({...d,branch:'1'}));
+    const discs2=getDiscrepancies(currentDate,'2').map(d=>({...d,branch:'2'}));
+    const allDiscs=[...discs1,...discs2];
+    body.innerHTML = `
+      ${allDiscs.length?`<div class="notice n-danger">⚠ <b>${allDiscs.length} stock discrepanc${allDiscs.length===1?'y':'ies'} today:</b>&nbsp; ${allDiscs.map(d=>`${branchLabel(d.branch)} ${esc(d.menu)} (${d.diff>0?'+':''}${d.diff})`).join(', ')}</div>`:''}
+      <div class="stats">
+        <div class="stat"><div class="stat-lbl">Total Produced</div><div class="stat-val">${totProd}</div><div class="stat-sub">pcs, all menus</div></div>
+        <div class="stat"><div class="stat-lbl">Branch 1 Available</div><div class="stat-val" style="color:var(--b1)">${totAvail1}</div><div class="stat-sub">${sold1} sold today (incl. carryover)</div></div>
+        <div class="stat"><div class="stat-lbl">Branch 2 Available</div><div class="stat-val" style="color:var(--b2)">${totAvail2}</div><div class="stat-sub">${sold2} sold today (incl. carryover)</div></div>
+        <div class="stat"><div class="stat-lbl">Menu Items</div><div class="stat-val">${menus.length}</div></div>
+      </div>
+      ${menus.length===0?`<div class="notice n-info">No menu items yet. Go to <b>Menu Items</b> to add your first product, then <b>Stock Master</b> to record today's production.</div>`:''}
+    `;
+  } else {
+    const branch = u.role==='branch1'?'1':'2';
+    const rows = state.menus.map(m=>{
+      const rem=remaining(currentDate,branch,m.id);
+      const cls = rem<0?'color:var(--danger)':'';
+      return `<tr><td>${esc(m.name)}</td><td class="n" style="${cls};font-weight:700">${rem}</td></tr>`;
+    }).join('');
+    body.innerHTML = `
+      <div class="card"><div class="card-hdr"><div class="card-title">Your Branch Stock Remaining</div></div>
+      <div class="tbl-wrap"><table><thead><tr><th>Menu</th><th class="n">Remaining</th></tr></thead>
+      <tbody>${rows || '<tr><td colspan="2"><div class="empty">No menu items yet.</div></td></tr>'}</tbody></table></div></div>
+      <div class="form-row" style="margin-top:4px">
+        ${branch==='1'?`<button class="btn btn-accent" onclick="showTab('master')">Go to Stock Master →</button>`:''}
+        <button class="btn ${branch==='1'?'btn-secondary':'btn-accent'}" onclick="showTab('pos${branch}')">Go to POS →</button>
+        <button class="btn btn-secondary" onclick="showTab('opname${branch}')">Go to Stock Opname →</button>
+      </div>
+    `;
+  }
+}
+function fmtDate(s){ const [y,m,d]=s.split('-'); return `${d}/${m}/${y}`; }
+
+// ═══════════════════════════════════════════════
+// STOCK MASTER (owner)
+// ═══════════════════════════════════════════════
+function renderMaster(){
+  const day=getDay(currentDate);
+  const notice=document.getElementById('master-notice');
+  notice.innerHTML = state.menus.length? '' : `<div class="notice n-info">No menu items yet. Add them in the <b>Menu Items</b> tab first.</div>`;
+  const isOwner = currentUser().role==='owner';
+  const tbody=document.getElementById('master-tbody');
+  tbody.innerHTML = state.menus.map(m=>{
+    const p=produced(day,m.id), a1=alloc1(day,m.id), a2=alloc2(day,m.id);
+    const c1=carryIn(currentDate,'1',m.id), c2=carryIn(currentDate,'2',m.id);
+    const ov1=carryOverrideVal(currentDate,'1',m.id)!==undefined, ov2=carryOverrideVal(currentDate,'2',m.id)!==undefined;
+    const over = a1>p;
+    const pctA1 = p>0? Math.min(100,(a1/p*100)) : 0;
+    const pctA2 = 100-pctA1;
+    const carryBlock = isOwner ? `
+      <div style="margin-top:6px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <div style="display:flex;align-items:center;gap:4px">
+          <span class="badge b-b1">Carry B1</span>
+          <input class="tbl-inp" style="width:60px" type="number" min="0" value="${c1}" onchange="setCarryOverride('1','${m.id}',this.value)">
+          ${ov1?`<button class="btn btn-secondary btn-xs" title="Manually set — click to go back to automatic" onclick="resetCarryOverride('1','${m.id}')">↺ auto</button>`:''}
+        </div>
+        <div style="display:flex;align-items:center;gap:4px">
+          <span class="badge b-b2">Carry B2</span>
+          <input class="tbl-inp" style="width:60px" type="number" min="0" value="${c2}" onchange="setCarryOverride('2','${m.id}',this.value)">
+          ${ov2?`<button class="btn btn-secondary btn-xs" title="Manually set — click to go back to automatic" onclick="resetCarryOverride('2','${m.id}')">↺ auto</button>`:''}
+        </div>
+      </div>` : ((c1>0||c2>0)?`<div style="margin-top:3px">${c1>0?`<span class="badge b-b1">+${c1} carried B1</span> `:''}${c2>0?`<span class="badge b-b2">+${c2} carried B2</span>`:''}</div>`:'');
+    return `<tr class="${over?'tr-warn':''}">
+      <td>${esc(m.name)}
+        ${carryBlock}
+      </td>
+      <td class="n"><input class="tbl-inp" type="number" min="0" value="${p||''}" placeholder="0" onchange="setProduction('${m.id}',this.value)"></td>
+      <td class="n">
+        <input class="tbl-inp" type="number" min="0" value="${a1||''}" placeholder="0" onchange="setAlloc1('${m.id}',this.value)">
+        ${c1>0?`<div style="font-size:9px;color:var(--faint);margin-top:2px">= ${a1+c1} available</div>`:''}
+      </td>
+      <td class="n" style="font-weight:700;color:var(--b2)">${a2}
+        ${c2>0?`<div style="font-size:9px;font-weight:400;color:var(--faint);margin-top:2px">= ${a2+c2} available</div>`:''}
+      </td>
+      <td>
+        <div class="splitbar" title="Branch 1: ${a1} · Branch 2: ${a2}">
+          ${p>0?`<div class="seg1" style="width:${pctA1}%">${pctA1>=14?a1:''}</div><div class="seg2" style="width:${pctA2}%">${pctA2>=14?a2:''}</div>`:''}
+        </div>
+        ${over?'<div style="font-size:9px;color:var(--danger);margin-top:3px">Branch 1 exceeds produced qty</div>':''}
+      </td>
+    </tr>`;
+  }).join('') || `<tr><td colspan="5"><div class="empty"><div class="empty-title">No menu items</div></div></td></tr>`;
+}
+function setProduction(mId,val){ const day=getDay(currentDate); day.production[mId]=Number(val)||0; day.production_ts[mId]=Date.now(); save(); renderMaster(); }
+function setAlloc1(mId,val){ const day=getDay(currentDate); day.alloc1[mId]=Number(val)||0; day.alloc1_ts[mId]=Date.now(); save(); renderMaster(); }
+
+// ═══════════════════════════════════════════════
+// MENUS
+// ═══════════════════════════════════════════════
+function addMenu(){
+  const inp=document.getElementById('new-menu-name');
+  const name=inp.value.trim(); if(!name) return;
+  state.menus.push({id:uid(), name, updatedAt:Date.now()}); inp.value=''; save(); renderMenus();
+}
+function renameMenu(id){
+  const m=state.menus.find(x=>x.id===id); if(!m) return;
+  const name=prompt('Menu name', m.name); if(!name) return;
+  m.name=name.trim(); m.updatedAt=Date.now(); save(); renderMenus();
+}
+function deleteMenu(id){
+  if(!confirm('Delete this menu item? Past production/sales records will keep showing it as "(deleted menu)".')) return;
+  state.menus=state.menus.filter(x=>x.id!==id); state.tomb.menu.push(id); save(); renderMenus();
+}
+function renderMenus(){
+  const tbody=document.getElementById('menus-tbody');
+  tbody.innerHTML = state.menus.map(m=>`
+    <tr><td>${esc(m.name)}</td>
+    <td class="td-acts">
+      <button class="btn btn-secondary btn-xs" onclick="renameMenu('${m.id}')">Rename</button>
+      <button class="btn btn-danger btn-xs" onclick="deleteMenu('${m.id}')">Delete</button>
+    </td></tr>`).join('') || `<tr><td colspan="2"><div class="empty"><div class="empty-title">No menu items yet</div></div></td></tr>`;
+}
+
+// ═══════════════════════════════════════════════
+// POS (shared renderer for branch '1' / '2')
+// ═══════════════════════════════════════════════
+let editingTxId=null;   // tx currently being edited (per branch, only one at a time)
+let editBuffer=null;    // working copy of items[] while editing
+let posCart={'1':[], '2':[]}; // items staged for a new transaction, per branch
+function branchLabel(b){ return b==='1'?'Branch 1':'Branch 2'; }
+function branchColor(b){ return b==='1'?'var(--b1)':'var(--b2)'; }
+function nowTimestamp(){ return new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'}); }
+
+function menuSelectOptions(selectedId){
+  return state.menus.map(m=>`<option value="${m.id}" ${m.id===selectedId?'selected':''}>${esc(m.name)}</option>`).join('');
+}
+function itemsSummary(items){
+  return (items||[]).map(i=>`${i.qty}× ${esc(menuName(i.menuId))}`).join(', ') || '<span style="color:var(--faint)">(no items)</span>';
+}
+
+function renderPOS(branch){
+  const panel=document.getElementById('panel-pos'+branch);
+  const day=getDay(currentDate);
+  const list=txList(day,branch);
+  const totalToday=totalSoldDay(list);
+
+  const stockRows = state.menus.map(m=>{
+    const rem=remaining(currentDate,branch,m.id);
+    return `<div class="stat"><div class="stat-lbl">${esc(m.name)}</div><div class="stat-val" style="${rem<0?'color:var(--danger)':''}">${rem}</div><div class="stat-sub">remaining</div></div>`;
+  }).join('');
+
+  // ── cart builder for a brand-new transaction ──
+  const cart = posCart[branch];
+  const cartRows = cart.map((it,idx)=>`
+    <tr><td>${esc(menuName(it.menuId))}</td><td class="n">${it.qty}</td>
+    <td class="td-acts"><button class="btn btn-danger btn-xs" onclick="cartRemoveItem('${branch}',${idx})">Remove</button></td></tr>
+  `).join('');
+  const cartTotal = cart.reduce((s,i)=>s+(Number(i.qty)||0),0);
+
+  const rows = list.slice().reverse().map(t=>{
+    if(t.id===editingTxId){
+      const bufRows = editBuffer.map((it,idx)=>`
+        <tr><td>${esc(menuName(it.menuId))}</td>
+        <td class="n"><input class="tbl-inp" type="number" min="1" value="${it.qty}" onchange="editUpdateQty(${idx},this.value)"></td>
+        <td class="td-acts"><button class="btn btn-danger btn-xs" onclick="editRemoveItem('${branch}',${idx})">Remove</button></td></tr>
+      `).join('');
+      return `<tr class="tr-warn"><td colspan="4">
+        <div style="padding:8px 2px">
+          <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;color:var(--faint);margin-bottom:6px">Editing transaction — ${t.time}</div>
+          <table style="margin-bottom:8px"><tbody>${bufRows || '<tr><td colspan="3" style="color:var(--faint);font-size:12px">No items — add one below, or delete this transaction.</td></tr>'}</tbody></table>
+          <div class="form-row">
+            <div class="fld"><label>Menu</label><select id="edit-add-menu-${branch}">${menuSelectOptions()}</select></div>
+            <div class="fld"><label>Qty</label><input id="edit-add-qty-${branch}" type="number" min="1" value="1" style="width:80px"></div>
+            <button class="btn btn-secondary btn-xs" onclick="editAddItem('${branch}')">+ Add Item</button>
+          </div>
+          <div class="form-row" style="margin-top:10px">
+            <button class="btn btn-success btn-xs" onclick="saveEditTx('${branch}','${t.id}')">Save Transaction</button>
+            <button class="btn btn-secondary btn-xs" onclick="cancelEditTx('${branch}')">Cancel</button>
+            <button class="btn btn-danger btn-xs" onclick="deleteTx('${branch}','${t.id}')">Delete Transaction</button>
+          </div>
+        </div>
+      </td></tr>`;
+    }
+    return `<tr>
+      <td style="white-space:nowrap">${t.time}</td>
+      <td>${itemsSummary(t.items)}</td>
+      <td class="n" style="font-weight:700">${txTotalQty(t)}</td>
+      <td class="td-acts">
+        <button class="btn btn-secondary btn-xs" onclick="startEditTx('${branch}','${t.id}')">Edit</button>
+        <button class="btn btn-danger btn-xs" onclick="deleteTx('${branch}','${t.id}')">Delete</button>
+      </td>
+    </tr>`;
+  }).join('');
+
+  panel.innerHTML = `
+    <div class="pg-hdr"><div><div class="pg-title">${branchLabel(branch)} — POS</div><div class="pg-sub">Record sales transactions — a transaction can include multiple menu items. Stock is deducted automatically.</div></div></div>
+    ${state.menus.length===0?'<div class="notice n-info">No menu items yet. Add them in Menu Items first.</div>':''}
+
+    <div class="stats">
+      <div class="stat" style="border-color:var(--accent)">
+        <div class="stat-lbl">Total Items Sold Today</div>
+        <div class="stat-val" style="color:var(--accent)">${totalToday}</div>
+        <div class="stat-sub">${list.length} transaction${list.length===1?'':'s'}</div>
+      </div>
+    </div>
+
+    <div class="card-title" style="margin:4px 0 8px 2px">Stock Remaining by Menu</div>
+    <div class="stats">${stockRows || '<div style="color:var(--faint);font-size:12px">No menu items yet.</div>'}</div>
+
+    <div class="card">
+      <div class="card-hdr"><div class="card-title">New Transaction</div></div>
+      <div class="card-body">
+        <div class="form-row">
+          <div class="fld"><label>Menu</label><select id="cart-menu-${branch}">${menuSelectOptions()}</select></div>
+          <div class="fld"><label>Qty</label><input id="cart-qty-${branch}" type="number" min="1" value="1" style="width:80px"></div>
+          <button class="btn btn-secondary" onclick="cartAddItem('${branch}')">+ Add Item</button>
+        </div>
+        ${cart.length? `
+          <div class="tbl-wrap" style="margin-top:12px"><table>
+            <thead><tr><th>Menu</th><th class="n">Qty</th><th class="td-acts"></th></tr></thead>
+            <tbody>${cartRows}</tbody>
+          </table></div>
+          <div class="form-row" style="margin-top:10px">
+            <button class="btn btn-accent" onclick="saveTransaction('${branch}')">💾 Save Transaction (${cartTotal} item${cartTotal===1?'':'s'})</button>
+            <button class="btn btn-secondary" onclick="cartClear('${branch}')">Clear</button>
+          </div>
+        ` : '<div style="font-size:11px;color:var(--faint);margin-top:8px">Add one or more items above, then save them together as one transaction.</div>'}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-hdr"><div class="card-title">Transactions — ${fmtDate(currentDate)}</div></div>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Time</th><th>Items</th><th class="n">Total Qty</th><th class="td-acts">Actions</th></tr></thead>
+        <tbody>${rows || '<tr><td colspan="4"><div class="empty">No transactions recorded yet.</div></td></tr>'}</tbody>
+      </table></div>
+    </div>
+  `;
+}
+
+function cartAddItem(branch){
+  if(!state.menus.length) return;
+  const menuId=document.getElementById('cart-menu-'+branch).value;
+  const qty=Number(document.getElementById('cart-qty-'+branch).value)||0;
+  if(qty<=0) return;
+  posCart[branch].push({menuId, qty});
+  renderPOS(branch);
+}
+function cartRemoveItem(branch, idx){ posCart[branch].splice(idx,1); renderPOS(branch); }
+function cartClear(branch){ posCart[branch]=[]; renderPOS(branch); }
+function saveTransaction(branch){
+  const cart=posCart[branch];
+  if(!cart.length) return;
+  const day=getDay(currentDate);
+  txList(day,branch).push({
+    id:uid(),
+    time: nowTimestamp(),
+    items: cart.map(i=>({menuId:i.menuId, qty:Number(i.qty)})),
+    updatedAt: Date.now()
+  });
+  posCart[branch]=[];
+  save(); renderPOS(branch); renderTabs();
+}
+
+function startEditTx(branch,id){
+  const day=getDay(currentDate);
+  const t=txList(day,branch).find(x=>x.id===id); if(!t) return;
+  editingTxId=id;
+  editBuffer=JSON.parse(JSON.stringify(t.items||[]));
+  renderPOS(branch);
+}
+function cancelEditTx(branch){ editingTxId=null; editBuffer=null; renderPOS(branch); }
+function editAddItem(branch){
+  if(!state.menus.length) return;
+  const menuId=document.getElementById('edit-add-menu-'+branch).value;
+  const qty=Number(document.getElementById('edit-add-qty-'+branch).value)||0;
+  if(qty<=0) return;
+  editBuffer.push({menuId, qty});
+  renderPOS(branch);
+}
+function editRemoveItem(branch, idx){ editBuffer.splice(idx,1); renderPOS(branch); }
+function editUpdateQty(idx, val){ editBuffer[idx].qty=Number(val)||0; }
+function saveEditTx(branch,id){
+  const day=getDay(currentDate);
+  const t=txList(day,branch).find(x=>x.id===id); if(!t) return;
+  if(!editBuffer.length){ deleteTx(branch,id); editingTxId=null; editBuffer=null; return; }
+  t.items=editBuffer.map(i=>({menuId:i.menuId, qty:Number(i.qty)}));
+  t.updatedAt=Date.now();
+  editingTxId=null; editBuffer=null;
+  save(); renderPOS(branch);
+}
+function deleteTx(branch,id){
+  if(!confirm('Delete this transaction? Stock will be restored accordingly.')) return;
+  state.tomb.tx.push(id);
+  const day=getDay(currentDate);
+  if(branch==='1') day.tx1=day.tx1.filter(x=>x.id!==id); else day.tx2=day.tx2.filter(x=>x.id!==id);
+  if(editingTxId===id){ editingTxId=null; editBuffer=null; }
+  save(); renderPOS(branch);
+}
+
+// ═══════════════════════════════════════════════
+// STOCK OPNAME
+// ═══════════════════════════════════════════════
+function getDiscrepancies(dateStr,branch){
+  const out=[];
+  state.menus.forEach(m=>{
+    const op=opnameVal(dateStr,branch,m.id);
+    if(op===undefined) return;
+    const sys=remaining(dateStr,branch,m.id);
+    const diff=op-sys;
+    if(diff!==0) out.push({menu:m.name, diff});
+  });
+  return out;
+}
+function renderOpname(branch){
+  const panel=document.getElementById('panel-opname'+branch);
+  const day=getDay(currentDate);
+  const opKey = branch==='1'?'opname1':'opname2';
+  const discs=getDiscrepancies(currentDate,branch);
+  const rows = state.menus.map(m=>{
+    const sys=remaining(currentDate,branch,m.id);
+    const rec=day[opKey][m.id];
+    const has = rec!==undefined && rec!==null && rec!=='';
+    const diff = has ? Number(rec)-sys : null;
+    let statusHtml;
+    if(!has) statusHtml = `<span class="badge" style="background:#f3f4f6;color:#9ca3af">Not counted</span>`;
+    else if(diff===0) statusHtml = `<span class="badge b-ok">Match</span>`;
+    else statusHtml = `<span class="badge ${diff<0?'b-danger':'b-warn'}">${diff>0?'+':''}${diff} ${diff<0?'missing':'surplus'}</span>`;
+    return `<tr class="${has && diff!==0 ? (diff<0?'tr-danger':'tr-warn') : ''}">
+      <td>${esc(m.name)}</td>
+      <td class="n">${sys}</td>
+      <td class="n"><input class="tbl-inp" type="number" min="0" value="${has?rec:''}" placeholder="count" onchange="setOpname('${branch}','${m.id}',this.value)"></td>
+      <td>${statusHtml}</td>
+    </tr>`;
+  }).join('');
+  panel.innerHTML = `
+    <div class="pg-hdr"><div><div class="pg-title">${branchLabel(branch)} — Stock Opname</div><div class="pg-sub">Enter the physical leftover count for each menu at end of day. This count (not the system number) is what carries forward as tomorrow's opening stock.</div></div></div>
+    ${state.menus.length===0?'<div class="notice n-info">No menu items yet.</div>':''}
+    ${discs.length?`<div class="notice n-danger">⚠ <b>${discs.length} stock discrepanc${discs.length===1?'y':'ies'} today:</b>&nbsp; ${discs.map(d=>`${esc(d.menu)} (${d.diff>0?'+':''}${d.diff})`).join(', ')}</div>`:''}
+    <div class="card"><div class="tbl-wrap"><table>
+      <thead><tr><th>Menu</th><th class="n">System Remaining</th><th class="n">Manual Count</th><th>Status</th></tr></thead>
+      <tbody>${rows || ''}</tbody>
+    </table></div></div>
+  `;
+}
+function setOpname(branch,mId,val){
+  const day=getDay(currentDate);
+  const key = branch==='1'?'opname1':'opname2';
+  day[key][mId] = val===''? undefined : Number(val);
+  day[key+'_ts'][mId] = Date.now();
+  save(); renderOpname(branch);
+}
+
+// ═══════════════════════════════════════════════
+// USERS (owner)
+// ═══════════════════════════════════════════════
+function addUser(){
+  const name=document.getElementById('nu-name').value.trim();
+  const username=document.getElementById('nu-user').value.trim();
+  const password=document.getElementById('nu-pass').value;
+  const role=document.getElementById('nu-role').value;
+  if(!name||!username||!password){ alert('Please fill in name, username and password.'); return; }
+  if(state.users.find(u=>u.username.toLowerCase()===username.toLowerCase())){ alert('That username is already taken.'); return; }
+  state.users.push({id:uid(), name, username, password, role, updatedAt:Date.now()});
+  document.getElementById('nu-name').value='';
+  document.getElementById('nu-user').value='';
+  document.getElementById('nu-pass').value='';
+  save(); renderUsers();
+}
+function deleteUser(id){
+  const u=state.users.find(x=>x.id===id);
+  if(u.role==='owner'){ alert('The owner account cannot be deleted.'); return; }
+  if(!confirm(`Remove login for ${u.name}?`)) return;
+  state.users=state.users.filter(x=>x.id!==id); state.tomb.user.push(id); save(); renderUsers();
+}
+function editUserPass(id){
+  const u=state.users.find(x=>x.id===id); if(!u) return;
+  const np=prompt('New password for '+u.name, ''); if(!np) return;
+  u.password=np; u.updatedAt=Date.now(); save(); renderUsers();
+}
+function renderUsers(){
+  const tbody=document.getElementById('users-tbody');
+  tbody.innerHTML = state.users.map(u=>`
+    <tr><td>${esc(u.name)}</td><td>${esc(u.username)}</td>
+    <td><span class="badge ${roleTagClass(u.role)}">${roleLabel(u.role)}</span></td>
+    <td class="code">${'•'.repeat(Math.min(8,u.password.length))}</td>
+    <td class="td-acts">
+      <button class="btn btn-secondary btn-xs" onclick="editUserPass('${u.id}')">Reset password</button>
+      ${u.role!=='owner'?`<button class="btn btn-danger btn-xs" onclick="deleteUser('${u.id}')">Remove</button>`:''}
+    </td></tr>`).join('');
+}
+
+// ═══════════════════════════════════════════════
+// BACKUP
+// ═══════════════════════════════════════════════
+function exportData(){
+  const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`stockpos-backup-${todayStr()}.json`;
+  a.click();
+}
+function importData(evt){
+  const file=evt.target.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      const parsed=JSON.parse(reader.result);
+      if(!confirm('Import this backup? It will replace all current data in this browser.')) return;
+      state=Object.assign(defaultState(), parsed);
+      save();
+      alert('Backup imported.');
+      boot();
+    }catch(e){ alert('Could not read this file — is it a valid backup .json?'); }
+  };
+  reader.readAsText(file);
+}
+
+// ═══════════════════════════════════════════════
+// MERGE ENGINE (used when syncing with Google Drive)
+// ═══════════════════════════════════════════════
+function mergeRecords(localArr, remoteArr, tombIds){
+  const map=new Map();
+  (localArr||[]).forEach(r=>map.set(r.id,r));
+  (remoteArr||[]).forEach(r=>{
+    const ex=map.get(r.id);
+    if(!ex || (r.updatedAt||0) > (ex.updatedAt||0)) map.set(r.id,r);
+  });
+  const tomb=new Set(tombIds||[]);
+  return Array.from(map.values()).filter(r=>!tomb.has(r.id));
+}
+function mergeScalarDict(lVal,lTs,rVal,rTs){
+  const keys=new Set([...Object.keys(lVal||{}), ...Object.keys(rVal||{})]);
+  const outVal={}, outTs={};
+  keys.forEach(k=>{
+    const lt=(lTs&&lTs[k])||0, rt=(rTs&&rTs[k])||0;
+    if(rt>lt){ outVal[k]=(rVal||{})[k]; outTs[k]=rt; }
+    else { outVal[k]=(lVal||{})[k]; outTs[k]=lt; }
+  });
+  return {val:outVal, ts:outTs};
+}
+function mergeTxArr(la,ra,tomb){
+  const map=new Map();
+  (la||[]).forEach(t=>map.set(t.id,normalizeTx(t)));
+  (ra||[]).forEach(t=>{
+    t=normalizeTx(t);
+    const ex=map.get(t.id);
+    if(!ex || (t.updatedAt||0) > (ex.updatedAt||0)) map.set(t.id,t);
+  });
+  return Array.from(map.values()).filter(t=>!tomb.has(t.id)).sort((a,b)=>(a.updatedAt||0)-(b.updatedAt||0));
+}
+function mergeDay(l,r,tombTxSet){
+  l=l||emptyDay(); r=r||emptyDay();
+  const p=mergeScalarDict(l.production,l.production_ts,r.production,r.production_ts);
+  const a=mergeScalarDict(l.alloc1,l.alloc1_ts,r.alloc1,r.alloc1_ts);
+  const o1=mergeScalarDict(l.opname1,l.opname1_ts,r.opname1,r.opname1_ts);
+  const o2=mergeScalarDict(l.opname2,l.opname2_ts,r.opname2,r.opname2_ts);
+  const c1=mergeScalarDict(l.carryOv1,l.carryOv1_ts,r.carryOv1,r.carryOv1_ts);
+  const c2=mergeScalarDict(l.carryOv2,l.carryOv2_ts,r.carryOv2,r.carryOv2_ts);
+  return {
+    production:p.val, production_ts:p.ts,
+    alloc1:a.val, alloc1_ts:a.ts,
+    opname1:o1.val, opname1_ts:o1.ts,
+    opname2:o2.val, opname2_ts:o2.ts,
+    carryOv1:c1.val, carryOv1_ts:c1.ts,
+    carryOv2:c2.val, carryOv2_ts:c2.ts,
+    tx1: mergeTxArr(l.tx1,r.tx1,tombTxSet),
+    tx2: mergeTxArr(l.tx2,r.tx2,tombTxSet),
+  };
+}
+function mergeState(local, remote){
+  if(!remote || typeof remote!=='object' || Object.keys(remote).length===0) return local;
+  const merged = JSON.parse(JSON.stringify(local));
+  const rtomb = remote.tomb || {menu:[],user:[],tx:[]};
+  merged.tomb = merged.tomb || {menu:[],user:[],tx:[]};
+  merged.tomb.menu = Array.from(new Set([...(merged.tomb.menu||[]), ...(rtomb.menu||[])]));
+  merged.tomb.user = Array.from(new Set([...(merged.tomb.user||[]), ...(rtomb.user||[])]));
+  merged.tomb.tx = Array.from(new Set([...(merged.tomb.tx||[]), ...(rtomb.tx||[])]));
+
+  if(!merged.businessName && remote.businessName) merged.businessName = remote.businessName;
+
+  merged.menus = mergeRecords(merged.menus, remote.menus, merged.tomb.menu);
+  merged.users = mergeRecords(merged.users, remote.users, merged.tomb.user);
+  if(!merged.users.find(u=>u.role==='owner')){
+    const remoteOwner = (remote.users||[]).find(u=>u.role==='owner');
+    if(remoteOwner) merged.users.push(remoteOwner);
+  }
+
+  const tombTxSet = new Set(merged.tomb.tx);
+  const allDates = new Set([...Object.keys(merged.days||{}), ...Object.keys(remote.days||{})]);
+  merged.days = merged.days||{};
+  allDates.forEach(dateStr=>{
+    merged.days[dateStr] = mergeDay(merged.days[dateStr], (remote.days||{})[dateStr], tombTxSet);
+  });
+  return merged;
+}
+
+// ═══════════════════════════════════════════════
+// GOOGLE DRIVE SYNC
+// ═══════════════════════════════════════════════
+const GCFG_KEY='stockpos_gcfg';
+const DRIVE_FILE_NAME='stockpos-sync-data.json';
+function loadGcfg(){ try{ return Object.assign({clientId:'',fileId:''}, JSON.parse(localStorage.getItem(GCFG_KEY)||'{}')); }catch(e){ return {clientId:'',fileId:''}; } }
+function saveGcfg(){ try{ localStorage.setItem(GCFG_KEY, JSON.stringify(gcfg)); }catch(e){} }
+let gcfg = loadGcfg();
+let gToken=null, gTokenClient=null, gConnected=false, gSyncing=false, gLastSync=null, gAutoTimer=null, gSyncDebounce=null;
+
+function gSaveClientId(){
+  const v=document.getElementById('gc-clientid').value.trim();
+  if(!v){ alert('Please paste a Google OAuth Client ID.'); return; }
+  gcfg.clientId=v; saveGcfg(); renderBackup();
+}
+function gTokenValid(){ return gToken && Date.now() < gToken.expires_at; }
+function gConnect(){
+  if(!gcfg.clientId){ alert('Enter and save your Google OAuth Client ID first.'); return; }
+  if(typeof google==='undefined' || !google.accounts || !google.accounts.oauth2){
+    alert('Google sign-in script has not finished loading yet — check your connection and try again in a moment.'); return;
+  }
+  gTokenClient = google.accounts.oauth2.initTokenClient({
+    client_id: gcfg.clientId,
+    scope: 'https://www.googleapis.com/auth/drive.file',
+    callback: async (resp)=>{
+      if(resp.error){ alert('Google sign-in failed: '+resp.error); return; }
+      gToken = { access_token: resp.access_token, expires_at: Date.now() + (resp.expires_in*1000 - 60000) };
+      gConnected = true;
+      renderBackup();
+      try{
+        await ensureFile();
+        await performSync();
+        startAutoSync();
+      }catch(e){ console.error(e); }
+    }
+  });
+  gTokenClient.requestAccessToken({prompt:''});
+}
+function gDisconnect(){
+  gConnected=false; gToken=null;
+  if(gAutoTimer){ clearInterval(gAutoTimer); gAutoTimer=null; }
+  renderBackup();
+}
+async function gFetch(url, opts={}){
+  if(!gTokenValid() && gTokenClient){
+    await new Promise(resolve=>{
+      gTokenClient.callback = (resp)=>{
+        if(!resp.error) gToken={access_token:resp.access_token, expires_at:Date.now()+(resp.expires_in*1000-60000)};
+        resolve();
+      };
+      gTokenClient.requestAccessToken({prompt:''});
+    });
+  }
+  if(!gTokenValid()) throw new Error('not-authenticated');
+  const headers=Object.assign({}, opts.headers||{}, {Authorization:'Bearer '+gToken.access_token});
+  const res=await fetch(url, Object.assign({}, opts, {headers}));
+  if(res.status===401){ gConnected=false; renderBackup(); throw new Error('unauthorized'); }
+  return res;
+}
+async function ensureFile(){
+  if(gcfg.fileId) return;
+  const q=encodeURIComponent(`name='${DRIVE_FILE_NAME}' and trashed=false`);
+  const res=await gFetch(`https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name)`);
+  const data=await res.json();
+  if(data.files && data.files.length){
+    gcfg.fileId=data.files[0].id; saveGcfg();
+  } else {
+    const createRes=await gFetch('https://www.googleapis.com/drive/v3/files', {
+      method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({name:DRIVE_FILE_NAME})
+    });
+    const created=await createRes.json();
+    gcfg.fileId=created.id; saveGcfg();
+    await gFetch(`https://www.googleapis.com/upload/drive/v3/files/${gcfg.fileId}?uploadType=media`, {
+      method:'PATCH', headers:{'Content-Type':'application/json'}, body:JSON.stringify(state)
+    });
+  }
+}
+async function performSync(){
+  if(!gConnected || gSyncing) return;
+  gSyncing=true; renderBackup();
+  try{
+    await ensureFile();
+    const getRes=await gFetch(`https://www.googleapis.com/drive/v3/files/${gcfg.fileId}?alt=media`);
+    let remote={};
+    try{ remote=await getRes.json(); }catch(e){ remote={}; }
+    state=mergeState(state, remote);
+    try{ localStorage.setItem(SK, JSON.stringify(state)); }catch(e){}
+    await gFetch(`https://www.googleapis.com/upload/drive/v3/files/${gcfg.fileId}?uploadType=media`, {
+      method:'PATCH', headers:{'Content-Type':'application/json'}, body:JSON.stringify(state)
+    });
+    gLastSync=new Date();
+    renderTabs(); renderActivePanel();
+  }catch(e){ console.error('Drive sync failed', e); }
+  finally{ gSyncing=false; renderBackup(); }
+}
+function startAutoSync(){
+  if(gAutoTimer) clearInterval(gAutoTimer);
+  gAutoTimer=setInterval(()=>{ if(gConnected) performSync(); }, 15000);
+}
+function scheduleSync(){
+  if(!gConnected) return;
+  if(gSyncDebounce) clearTimeout(gSyncDebounce);
+  gSyncDebounce=setTimeout(()=>performSync(), 2000);
+}
+function renderBackup(){
+  const ccEl=document.getElementById('gc-clientid'); if(ccEl) ccEl.value=gcfg.clientId||'';
+  const statusEl=document.getElementById('gsync-status');
+  const btnConnect=document.getElementById('gsync-connect-btn');
+  const btnRow=document.getElementById('gsync-connected-row');
+  if(!statusEl||!btnConnect||!btnRow) return;
+  if(gConnected){
+    btnConnect.classList.add('hidden'); btnRow.classList.remove('hidden');
+    statusEl.innerHTML = `<span class="badge b-ok">Connected</span> ${gSyncing?'Syncing…':'Last synced: '+(gLastSync?gLastSync.toLocaleTimeString():'never yet')}`;
+  } else {
+    btnConnect.classList.remove('hidden'); btnRow.classList.add('hidden');
+    statusEl.innerHTML = `<span class="badge" style="background:#f3f4f6;color:#9ca3af">Not connected</span>`;
+  }
+  updateHeaderSync();
+}
+function updateHeaderSync(){
+  const el=document.getElementById('hdr-sync'); if(!el) return;
+  if(!gcfg.clientId){ el.textContent=''; return; }
+  if(gConnected) el.textContent = gSyncing? '🔄 Syncing…' : '🟢 Synced '+(gLastSync?gLastSync.toLocaleTimeString():'');
+  else el.textContent='⚪ Drive not connected';
+}
+
+// ═══════════════════════════════════════════════
+// BOOT
+// ═══════════════════════════════════════════════
+function boot(){
+  const u=currentUser();
+  const authScreen=document.getElementById('screen-auth');
+  const app=document.getElementById('app');
+  if(!u){
+    app.classList.remove('on');
+    authScreen.classList.remove('hidden');
+    document.getElementById('auth-brand-name').textContent = state.businessName || 'Stock & POS';
+    if(state.users.length===0){
+      document.getElementById('setup-block').classList.remove('hidden');
+      document.getElementById('login-block').classList.add('hidden');
+      document.getElementById('auth-sub').textContent='First time setup — create the Owner account';
+    } else {
+      document.getElementById('setup-block').classList.add('hidden');
+      document.getElementById('login-block').classList.remove('hidden');
+      document.getElementById('auth-sub').textContent='Central kitchen stock & branch POS tracking';
+      document.getElementById('login-err').classList.add('hidden');
+      document.getElementById('li-user').value=''; document.getElementById('li-pass').value='';
+    }
+    return;
+  }
+  authScreen.classList.add('hidden');
+  app.classList.add('on');
+  document.getElementById('hdr-brand').textContent = state.businessName || 'Stock & POS';
+  document.getElementById('hdr-username').textContent = u.name;
+  const tag=document.getElementById('hdr-role-tag');
+  tag.textContent = roleLabel(u.role);
+  tag.className = 'hdr-role-tag '+roleTagClass(u.role);
+  document.getElementById('hdr-date').value = currentDate;
+  activeTab = TAB_DEFS.find(t=>t.roles.includes(u.role)).id;
+  renderTabs();
+  showTab(activeTab);
+  updateHeaderSync();
+}
+
+['su-pass2'].forEach(id=>{ const el=document.getElementById(id); if(el) el.addEventListener('keydown',e=>{if(e.key==='Enter')doSetup();}); });
+document.getElementById('li-pass').addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
+document.getElementById('new-menu-name').addEventListener('keydown', e=>{ if(e.key==='Enter') addMenu(); });
+
+boot();
+</script>
+</body>
+</html>
