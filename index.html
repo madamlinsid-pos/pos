@@ -148,6 +148,13 @@ tbody tr:hover td{background:#fcfbf8}
 
     <!-- first run setup -->
     <div id="setup-block">
+      <div id="setup-restore-block">
+        <div class="auth-hint" style="margin-bottom:10px">Already set this up on another device? Restore your existing data instead of starting over.</div>
+        <div class="auth-fld"><label>Google OAuth Client ID</label><input id="setup-clientid" placeholder="xxxxxxxxxx.apps.googleusercontent.com"></div>
+        <button class="auth-btn" style="background:#374151" onclick="gRestoreFromDrive()">🔁 Restore from Google Drive</button>
+        <div id="setup-restore-status" class="auth-hint"></div>
+        <div class="auth-hint" style="margin:16px 0;text-align:center">— or —</div>
+      </div>
       <div class="auth-fld"><label>Business name</label><input id="su-biz" placeholder="e.g. Dapur Beku"></div>
       <div class="auth-fld"><label>Owner username</label><input id="su-user" placeholder="owner"></div>
       <div class="auth-fld"><label>Owner password</label><input id="su-pass" type="password" placeholder="min 4 characters"></div>
@@ -258,7 +265,10 @@ tbody tr:hover td{background:#fcfbf8}
             <div class="fld" style="flex:1;min-width:260px"><label>Google OAuth Client ID</label><input id="gc-clientid" placeholder="xxxxxxxxxx.apps.googleusercontent.com"></div>
             <button class="btn btn-secondary" onclick="gSaveClientId()">Save Client ID</button>
           </div>
-          <div id="gsync-connect-btn"><button class="btn btn-accent" onclick="gConnect()">🔗 Connect Google Drive</button></div>
+          <div id="gsync-connect-btn" style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn btn-accent" onclick="gConnect()">🔗 Connect Google Drive</button>
+            <button class="btn btn-secondary" onclick="gSwitchAccount()">🔁 Connect with a different account</button>
+          </div>
           <div id="gsync-connected-row" class="hidden" style="display:flex;gap:10px;flex-wrap:wrap">
             <button class="btn btn-secondary" onclick="performSync()">↻ Sync now</button>
             <button class="btn btn-secondary" onclick="gSwitchAccount()">🔁 Use a different Google account</button>
@@ -1058,6 +1068,42 @@ function gSaveClientId(){
   gcfg.clientId=v; saveGcfg(); renderBackup();
 }
 function gTokenValid(){ return gToken && Date.now() < gToken.expires_at; }
+function gRestoreFromDrive(){
+  const el=document.getElementById('setup-clientid');
+  const v=el.value.trim();
+  const statusEl=document.getElementById('setup-restore-status');
+  if(!v){ alert('Paste the same Google OAuth Client ID that was used when this was first set up.'); return; }
+  if(typeof google==='undefined' || !google.accounts || !google.accounts.oauth2){
+    alert('Google sign-in script has not finished loading yet — check your connection and try again in a moment.'); return;
+  }
+  gcfg.clientId=v; saveGcfg();
+  statusEl.textContent='Signing in…';
+  gTokenClient = google.accounts.oauth2.initTokenClient({
+    client_id: gcfg.clientId,
+    scope: 'https://www.googleapis.com/auth/drive.file',
+    callback: async (resp)=>{
+      if(resp.error){ statusEl.textContent=''; alert('Google sign-in failed: '+resp.error); return; }
+      gToken = { access_token: resp.access_token, expires_at: Date.now() + (resp.expires_in*1000 - 60000) };
+      gConnected = true;
+      statusEl.textContent='Restoring data…';
+      try{
+        await ensureFile();
+        await performSync();
+        startAutoSync();
+        statusEl.textContent='';
+        if(state.users && state.users.length>0){
+          boot(); // re-render: should now show the login screen with restored users
+        } else {
+          statusEl.textContent='Signed in, but no existing data was found under this Google account — double check it\'s the same account used originally, or create a new business below instead.';
+        }
+      }catch(e){
+        console.error(e);
+        statusEl.textContent='Could not restore from Google Drive: '+e.message;
+      }
+    }
+  });
+  gTokenClient.requestAccessToken({prompt:'select_account'});
+}
 function gConnect(promptMode){
   if(!gcfg.clientId){ alert('Enter and save your Google OAuth Client ID first.'); return; }
   if(typeof google==='undefined' || !google.accounts || !google.accounts.oauth2){
