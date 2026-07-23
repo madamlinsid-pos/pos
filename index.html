@@ -198,7 +198,7 @@ tbody tr:hover td{background:#fcfbf8}
     <!-- STOCK MASTER (owner) -->
     <div class="panel" id="panel-master">
       <div class="pg-hdr">
-        <div><div class="pg-title">Stock Master</div><div class="pg-sub">Branch 1 (central kitchen) enters today's production, then decides how much goes to Branch 1 and how much goes to Branch 2 — both are set manually, so the remainder is <b>not</b> sent to Branch 2 automatically. Any amount not yet given to either branch shows up as "Unallocated" until it's assigned. Any leftover stock from yesterday (based on that branch's opname count) is automatically added on top — shown as "carried B1/B2" badges below. Owner can review or override any of these numbers here too.</div></div>
+        <div><div class="pg-title">Stock Master</div><div class="pg-sub">Branch 1 (central kitchen) enters today's production, then decides how much goes to Branch 1 and how much goes to Branch 2 — both are set manually, so the remainder is <b>not</b> sent to Branch 2 automatically. Any amount not yet given to either branch shows up as "Unallocated" and automatically rolls into <b>tomorrow's</b> Produced total on top of whatever's newly made — shown as a "+ unallocated" line under Produced below. Any leftover stock from yesterday (based on that branch's opname count) is automatically added on top — shown as "carried B1/B2" badges below. Owner can review or override any of these numbers here too.</div></div>
       </div>
       <div id="master-notice"></div>
       <div class="card">
@@ -311,13 +311,14 @@ function normalizeTx(t){
   if(!t.items){ t.items=[{menuId:t.menuId, qty:t.qty}]; }
   return t;
 }
-function emptyDay(){ return { production:{},production_ts:{}, alloc1:{},alloc1_ts:{}, alloc2:{},alloc2_ts:{}, tx1:[], tx2:[], opname1:{},opname1_ts:{}, opname2:{},opname2_ts:{}, opnameBy1:null, opnameBy2:null, carryOv1:{},carryOv1_ts:{}, carryOv2:{},carryOv2_ts:{} }; }
+function emptyDay(){ return { production:{},production_ts:{}, alloc1:{},alloc1_ts:{}, alloc2:{},alloc2_ts:{}, prodCarryOv:{},prodCarryOv_ts:{}, tx1:[], tx2:[], opname1:{},opname1_ts:{}, opname2:{},opname2_ts:{}, opnameBy1:null, opnameBy2:null, carryOv1:{},carryOv1_ts:{}, carryOv2:{},carryOv2_ts:{} }; }
 function getDay(dateStr){
   if(!state.days[dateStr]) state.days[dateStr] = emptyDay();
   const d = state.days[dateStr];
   d.production=d.production||{}; d.production_ts=d.production_ts||{};
   d.alloc1=d.alloc1||{}; d.alloc1_ts=d.alloc1_ts||{};
   d.alloc2=d.alloc2||{}; d.alloc2_ts=d.alloc2_ts||{};
+  d.prodCarryOv=d.prodCarryOv||{}; d.prodCarryOv_ts=d.prodCarryOv_ts||{};
   d.tx1=(d.tx1||[]).map(normalizeTx); d.tx2=(d.tx2||[]).map(normalizeTx);
   d.opname1=d.opname1||{}; d.opname1_ts=d.opname1_ts||{};
   d.opname2=d.opname2||{}; d.opname2_ts=d.opname2_ts||{};
@@ -335,7 +336,33 @@ let currentDate = todayStr();
 function produced(day,mId){ return Number(day.production[mId])||0; }
 function alloc1(day,mId){ return Number(day.alloc1[mId])||0; }
 function alloc2(day,mId){ return Number(day.alloc2[mId])||0; }
-function unallocated(day,mId){ return produced(day,mId) - alloc1(day,mId) - alloc2(day,mId); }
+// ── unallocated stock at end of day automatically carries into next day's Produced total ──
+function prodCarryOverrideVal(dateStr,mId){
+  const day=getDay(dateStr);
+  const rec=day.prodCarryOv[mId];
+  return (rec===undefined||rec===null||rec==='')?undefined:Number(rec);
+}
+function prodCarryIn(dateStr,mId){
+  const ov=prodCarryOverrideVal(dateStr,mId);
+  if(ov!==undefined) return Math.max(0,ov);
+  const prev=prevDateStr(dateStr);
+  if(!state.days[prev]) return 0;
+  return Math.max(0, unallocated(prev,mId));
+}
+function effProduced(dateStr,mId){ const day=getDay(dateStr); return produced(day,mId) + prodCarryIn(dateStr,mId); }
+function unallocated(dateStr,mId){ const day=getDay(dateStr); return effProduced(dateStr,mId) - alloc1(day,mId) - alloc2(day,mId); }
+function setProdCarryOverride(mId,val){
+  const day=getDay(currentDate);
+  day.prodCarryOv[mId] = val===''? undefined : Number(val);
+  day.prodCarryOv_ts[mId] = Date.now();
+  save(); renderMaster();
+}
+function resetProdCarryOverride(mId){
+  const day=getDay(currentDate);
+  day.prodCarryOv[mId] = undefined;
+  day.prodCarryOv_ts[mId] = Date.now();
+  save(); renderMaster();
+}
 function sold(list,mId){ return list.reduce((s,t)=>s + (t.items||[]).filter(i=>i.menuId===mId).reduce((s2,i)=>s2+(Number(i.qty)||0),0), 0); }
 function txTotalQty(t){ return (t.items||[]).reduce((s,i)=>s+(Number(i.qty)||0),0); }
 function totalSoldDay(list){ return list.reduce((s,t)=>s+txTotalQty(t),0); }
@@ -493,7 +520,7 @@ function renderDash(){
   const body=document.getElementById('dash-body');
   if(u.role==='owner'){
     const menus=state.menus;
-    const totProd=menus.reduce((s,m)=>s+produced(day,m.id),0);
+    const totProd=menus.reduce((s,m)=>s+effProduced(currentDate,m.id),0);
     const totAvail1=menus.reduce((s,m)=>s+baseQty(currentDate,'1',m.id),0);
     const totAvail2=menus.reduce((s,m)=>s+baseQty(currentDate,'2',m.id),0);
     const sold1=menus.reduce((s,m)=>s+sold(day.tx1,m.id),0);
@@ -542,8 +569,11 @@ function renderMaster(){
   const isOwner = currentUser().role==='owner';
   const tbody=document.getElementById('master-tbody');
   tbody.innerHTML = state.menus.map(m=>{
-    const p=produced(day,m.id), a1=alloc1(day,m.id), a2=alloc2(day,m.id);
-    const unalloc=unallocated(day,m.id);
+    const pRaw=produced(day,m.id), a1=alloc1(day,m.id), a2=alloc2(day,m.id);
+    const pCarry=prodCarryIn(currentDate,m.id);
+    const p=pRaw+pCarry; // effective produced = today's manual entry + yesterday's unallocated leftover
+    const povOv=prodCarryOverrideVal(currentDate,m.id)!==undefined;
+    const unalloc=unallocated(currentDate,m.id);
     const c1=carryIn(currentDate,'1',m.id), c2=carryIn(currentDate,'2',m.id);
     const ov1=carryOverrideVal(currentDate,'1',m.id)!==undefined, ov2=carryOverrideVal(currentDate,'2',m.id)!==undefined;
     const over = (a1+a2)>p;
@@ -567,7 +597,16 @@ function renderMaster(){
       <td>${esc(m.name)}
         ${carryBlock}
       </td>
-      <td class="n"><input class="tbl-inp" type="number" min="0" value="${p||''}" placeholder="0" onchange="setProduction('${m.id}',this.value)"></td>
+      <td class="n">
+        <input class="tbl-inp" type="number" min="0" value="${pRaw||''}" placeholder="0" onchange="setProduction('${m.id}',this.value)">
+        ${isOwner ? `
+          <div style="margin-top:4px;display:flex;align-items:center;gap:4px;justify-content:flex-end">
+            <span class="badge" style="background:#f3f4f6;color:#6b7280" title="Yesterday's leftover stock that wasn't given to either branch">+ unallocated</span>
+            <input class="tbl-inp" style="width:50px" type="number" min="0" value="${pCarry}" onchange="setProdCarryOverride('${m.id}',this.value)">
+            ${povOv?`<button class="btn btn-secondary btn-xs" title="Manually set — click to go back to automatic" onclick="resetProdCarryOverride('${m.id}')">↺ auto</button>`:''}
+          </div>` : (pCarry>0?`<div style="font-size:9px;color:var(--faint);margin-top:2px">+${pCarry} carried from yesterday's unallocated</div>`:'')}
+        ${pCarry>0?`<div style="font-size:9px;font-weight:600;color:var(--ink);margin-top:2px">= ${p} total to allocate</div>`:''}
+      </td>
       <td class="n">
         <input class="tbl-inp" type="number" min="0" value="${a1||''}" placeholder="0" onchange="setAlloc1('${m.id}',this.value)">
         ${c1>0?`<div style="font-size:9px;color:var(--faint);margin-top:2px">= ${a1+c1} available</div>`:''}
@@ -577,7 +616,7 @@ function renderMaster(){
         ${c2>0?`<div style="font-size:9px;color:var(--faint);margin-top:2px">= ${a2+c2} available</div>`:''}
       </td>
       <td class="n" style="font-weight:700;color:${unalloc<0?'var(--danger)':unalloc>0?'var(--warn)':'var(--faint)'}">${unalloc}
-        ${unalloc>0?`<div style="font-size:9px;font-weight:400;color:var(--faint);margin-top:2px">not yet given out</div>`:''}
+        ${unalloc>0?`<div style="font-size:9px;font-weight:400;color:var(--faint);margin-top:2px">not yet given out — rolls into tomorrow's Produced</div>`:''}
         ${unalloc<0?`<div style="font-size:9px;font-weight:400;color:var(--danger);margin-top:2px">over-allocated</div>`:''}
       </td>
       <td>
@@ -832,10 +871,11 @@ function renderOpname(branch){
     let statusHtml;
     if(!has) statusHtml = `<span class="badge" style="background:#f3f4f6;color:#9ca3af">Not counted</span>`;
     else if(diff===0) statusHtml = `<span class="badge b-ok">Match</span>`;
-    else statusHtml = `<span class="badge ${diff<0?'b-danger':'b-warn'}">${diff>0?'+':''}${diff} ${diff<0?'missing':'surplus'}</span>`;
+    else if(isOwner) statusHtml = `<span class="badge ${diff<0?'b-danger':'b-warn'}">${diff>0?'+':''}${diff} ${diff<0?'missing':'surplus'}</span>`;
+    else statusHtml = `<span class="badge b-warn">⚠ Doesn't match — recheck</span>`;
     return `<tr class="${has && diff!==0 ? (diff<0?'tr-danger':'tr-warn') : ''}">
       <td>${esc(m.name)}</td>
-      <td class="n">${sys}</td>
+      ${isOwner?`<td class="n">${sys}</td>`:''}
       <td class="n"><input class="tbl-inp" type="number" min="0" value="${has?rec:''}" placeholder="count" onchange="setOpname('${branch}','${m.id}',this.value)"></td>
       <td>${statusHtml}</td>
     </tr>`;
@@ -859,9 +899,12 @@ function renderOpname(branch){
     <div class="pg-hdr"><div><div class="pg-title">${branchLabel(branch)} — Stock Opname</div><div class="pg-sub">Enter the physical leftover count for each menu at end of day. This count (not the system number) is what carries forward as tomorrow's opening stock. Select who is doing the count below — it's saved with today's date so the owner can review a history of who counted stock and when.</div></div></div>
     ${state.menus.length===0?'<div class="notice n-info">No menu items yet.</div>':''}
     ${whoBlock}
-    ${discs.length?`<div class="notice n-danger">⚠ <b>${discs.length} stock discrepanc${discs.length===1?'y':'ies'} today:</b>&nbsp; ${discs.map(d=>`${esc(d.menu)} (${d.diff>0?'+':''}${d.diff})`).join(', ')}</div>`:''}
+    ${discs.length?(isOwner
+      ? `<div class="notice n-danger">⚠ <b>${discs.length} stock discrepanc${discs.length===1?'y':'ies'} today:</b>&nbsp; ${discs.map(d=>`${esc(d.menu)} (${d.diff>0?'+':''}${d.diff})`).join(', ')}</div>`
+      : `<div class="notice n-danger">⚠ <b>${discs.length} item${discs.length===1?"":'s'} don\'t match</b> — please recount: ${discs.map(d=>esc(d.menu)).join(', ')}</div>`
+    ):''}
     <div class="card"><div class="tbl-wrap"><table>
-      <thead><tr><th>Menu</th><th class="n">System Remaining</th><th class="n">Manual Count</th><th>Status</th></tr></thead>
+      <thead><tr><th>Menu</th>${isOwner?'<th class="n">System Remaining</th>':''}<th class="n">Manual Count</th><th>Status</th></tr></thead>
       <tbody>${rows || ''}</tbody>
     </table></div></div>
     ${isOwner?renderOpnameHistoryCard(branch):''}
@@ -1007,6 +1050,7 @@ function mergeDay(l,r,tombTxSet){
   const p=mergeScalarDict(l.production,l.production_ts,r.production,r.production_ts);
   const a=mergeScalarDict(l.alloc1,l.alloc1_ts,r.alloc1,r.alloc1_ts);
   const a2=mergeScalarDict(l.alloc2,l.alloc2_ts,r.alloc2,r.alloc2_ts);
+  const pc=mergeScalarDict(l.prodCarryOv,l.prodCarryOv_ts,r.prodCarryOv,r.prodCarryOv_ts);
   const o1=mergeScalarDict(l.opname1,l.opname1_ts,r.opname1,r.opname1_ts);
   const o2=mergeScalarDict(l.opname2,l.opname2_ts,r.opname2,r.opname2_ts);
   const c1=mergeScalarDict(l.carryOv1,l.carryOv1_ts,r.carryOv1,r.carryOv1_ts);
@@ -1015,6 +1059,7 @@ function mergeDay(l,r,tombTxSet){
     production:p.val, production_ts:p.ts,
     alloc1:a.val, alloc1_ts:a.ts,
     alloc2:a2.val, alloc2_ts:a2.ts,
+    prodCarryOv:pc.val, prodCarryOv_ts:pc.ts,
     opname1:o1.val, opname1_ts:o1.ts,
     opname2:o2.val, opname2_ts:o2.ts,
     opnameBy1: mergeOpnameBy(l.opnameBy1,r.opnameBy1),
@@ -1062,15 +1107,18 @@ function saveGcfg(){ try{ localStorage.setItem(GCFG_KEY, JSON.stringify(gcfg)); 
 let gcfg = loadGcfg();
 let gToken=null, gTokenClient=null, gConnected=false, gSyncing=false, gLastSync=null, gAutoTimer=null, gSyncDebounce=null;
 
+function sanitizeClientId(v){
+  return String(v||'').trim().replace(/^https?:\/\//i,'').replace(/\/+$/,'');
+}
 function gSaveClientId(){
-  const v=document.getElementById('gc-clientid').value.trim();
+  const v=sanitizeClientId(document.getElementById('gc-clientid').value);
   if(!v){ alert('Please paste a Google OAuth Client ID.'); return; }
   gcfg.clientId=v; saveGcfg(); renderBackup();
 }
 function gTokenValid(){ return gToken && Date.now() < gToken.expires_at; }
 function gRestoreFromDrive(){
   const el=document.getElementById('setup-clientid');
-  const v=el.value.trim();
+  const v=sanitizeClientId(el.value);
   const statusEl=document.getElementById('setup-restore-status');
   if(!v){ alert('Paste the same Google OAuth Client ID that was used when this was first set up.'); return; }
   if(typeof google==='undefined' || !google.accounts || !google.accounts.oauth2){
@@ -1217,9 +1265,15 @@ function renderBackup(){
 }
 function updateHeaderSync(){
   const el=document.getElementById('hdr-sync'); if(!el) return;
-  if(!gcfg.clientId){ el.textContent=''; return; }
-  if(gConnected) el.textContent = gSyncing? '🔄 Syncing…' : '🟢 Synced '+(gLastSync?gLastSync.toLocaleTimeString():'');
-  else el.textContent='⚪ Drive not connected';
+  if(!gcfg.clientId){ el.textContent=''; el.style.cursor=''; el.onclick=null; return; }
+  el.style.cursor='pointer';
+  if(gConnected){
+    el.textContent = gSyncing? '🔄 Syncing…' : '🟢 Synced '+(gLastSync?gLastSync.toLocaleTimeString():'')+' (tap to sync now)';
+    el.onclick = ()=>performSync();
+  } else {
+    el.textContent='⚪ Drive not connected — tap to connect';
+    el.onclick = ()=>gConnect();
+  }
 }
 
 // ═══════════════════════════════════════════════
@@ -1258,6 +1312,14 @@ function boot(){
   renderTabs();
   showTab(activeTab);
   updateHeaderSync();
+  attemptAutoConnect();
+}
+let gAutoConnectTried=false;
+function attemptAutoConnect(){
+  // any logged-in role (not just owner) should stay synced without needing the owner-only Backup tab
+  if(gAutoConnectTried) return;
+  gAutoConnectTried=true;
+  if(gcfg.clientId && !gConnected){ gConnect(); }
 }
 
 ['su-pass2'].forEach(id=>{ const el=document.getElementById(id); if(el) el.addEventListener('keydown',e=>{if(e.key==='Enter')doSetup();}); });
