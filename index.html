@@ -681,6 +681,7 @@ function renderPOS(branch){
   const day=getDay(currentDate);
   const list=txList(day,branch);
   const totalToday=totalSoldDay(list);
+  const isOwner = currentUser().role==='owner';
 
   const stockRows = state.menus.map(m=>{
     const rem=remaining(currentDate,branch,m.id);
@@ -742,8 +743,10 @@ function renderPOS(branch){
       </div>
     </div>
 
+    ${isOwner ? `
     <div class="card-title" style="margin:4px 0 8px 2px">Stock Remaining by Menu</div>
     <div class="stats">${stockRows || '<div style="color:var(--faint);font-size:12px">No menu items yet.</div>'}</div>
+    ` : ''}
 
     <div class="card">
       <div class="card-hdr"><div class="card-title">New Transaction</div></div>
