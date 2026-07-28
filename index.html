@@ -309,6 +309,7 @@ function save(){ try{ localStorage.setItem(SK, JSON.stringify(state)); }catch(e)
 
 function normalizeTx(t){
   if(!t.items){ t.items=[{menuId:t.menuId, qty:t.qty}]; }
+  if(t.category===undefined) t.category='';
   return t;
 }
 function emptyDay(){ return { production:{},production_ts:{}, alloc1:{},alloc1_ts:{}, alloc2:{},alloc2_ts:{}, prodCarryOv:{},prodCarryOv_ts:{}, tx1:[], tx2:[], opname1:{},opname1_ts:{}, opname2:{},opname2_ts:{}, opnameBy1:null, opnameBy2:null, carryOv1:{},carryOv1_ts:{}, carryOv2:{},carryOv2_ts:{} }; }
@@ -664,13 +665,20 @@ function renderMenus(){
 // ═══════════════════════════════════════════════
 let editingTxId=null;   // tx currently being edited (per branch, only one at a time)
 let editBuffer=null;    // working copy of items[] while editing
+let editCategory='';    // working copy of category while editing
 let posCart={'1':[], '2':[]}; // items staged for a new transaction, per branch
+let posCartCat={'1':'', '2':''}; // category staged for a new transaction, per branch
+const TX_CATS=['Dine in','Shopee','Toped','Grabfood','Gofood','Noodle cake'];
 function branchLabel(b){ return b==='1'?'Branch 1':'Branch 2'; }
 function branchColor(b){ return b==='1'?'var(--b1)':'var(--b2)'; }
 function nowTimestamp(){ return new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'}); }
 
 function menuSelectOptions(selectedId){
   return state.menus.map(m=>`<option value="${m.id}" ${m.id===selectedId?'selected':''}>${esc(m.name)}</option>`).join('');
+}
+function catOptions(selected){
+  const opts=TX_CATS.map(c=>`<option value="${esc(c)}" ${c===selected?'selected':''}>${esc(c)}</option>`).join('');
+  return `<option value="" ${!selected?'selected':''}>— No category —</option>${opts}`;
 }
 function itemsSummary(items){
   return (items||[]).map(i=>`${i.qty}× ${esc(menuName(i.menuId))}`).join(', ') || '<span style="color:var(--faint)">(no items)</span>';
@@ -703,9 +711,10 @@ function renderPOS(branch){
         <td class="n"><input class="tbl-inp" type="number" min="1" value="${it.qty}" onchange="editUpdateQty(${idx},this.value)"></td>
         <td class="td-acts"><button class="btn btn-danger btn-xs" onclick="editRemoveItem('${branch}',${idx})">Remove</button></td></tr>
       `).join('');
-      return `<tr class="tr-warn"><td colspan="4">
+      return `<tr class="tr-warn"><td colspan="5">
         <div style="padding:8px 2px">
           <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;color:var(--faint);margin-bottom:6px">Editing transaction — ${t.time}</div>
+          <div class="fld" style="margin-bottom:10px;max-width:220px"><label>Category</label><select onchange="editCategory=this.value">${catOptions(editCategory)}</select></div>
           <table style="margin-bottom:8px"><tbody>${bufRows || '<tr><td colspan="3" style="color:var(--faint);font-size:12px">No items — add one below, or delete this transaction.</td></tr>'}</tbody></table>
           <div class="form-row">
             <div class="fld"><label>Menu</label><select id="edit-add-menu-${branch}">${menuSelectOptions()}</select></div>
@@ -722,6 +731,7 @@ function renderPOS(branch){
     }
     return `<tr>
       <td style="white-space:nowrap">${t.time}</td>
+      <td><select class="tbl-inp" onchange="updateTxCategory('${branch}','${t.id}',this.value)">${catOptions(t.category)}</select></td>
       <td>${itemsSummary(t.items)}</td>
       <td class="n" style="font-weight:700">${txTotalQty(t)}</td>
       <td class="td-acts">
@@ -751,6 +761,9 @@ function renderPOS(branch){
     <div class="card">
       <div class="card-hdr"><div class="card-title">New Transaction</div></div>
       <div class="card-body">
+        <div class="form-row" style="margin-bottom:10px">
+          <div class="fld"><label>Category</label><select id="cart-cat-${branch}" onchange="posCartCat['${branch}']=this.value">${catOptions(posCartCat[branch])}</select></div>
+        </div>
         <div class="form-row">
           <div class="fld"><label>Menu</label><select id="cart-menu-${branch}">${menuSelectOptions()}</select></div>
           <div class="fld"><label>Qty</label><input id="cart-qty-${branch}" type="number" min="1" value="1" style="width:80px"></div>
@@ -772,8 +785,8 @@ function renderPOS(branch){
     <div class="card">
       <div class="card-hdr"><div class="card-title">Transactions — ${fmtDate(currentDate)}</div></div>
       <div class="tbl-wrap"><table>
-        <thead><tr><th>Time</th><th>Items</th><th class="n">Total Qty</th><th class="td-acts">Actions</th></tr></thead>
-        <tbody>${rows || '<tr><td colspan="4"><div class="empty">No transactions recorded yet.</div></td></tr>'}</tbody>
+        <thead><tr><th>Time</th><th>Category</th><th>Items</th><th class="n">Total Qty</th><th class="td-acts">Actions</th></tr></thead>
+        <tbody>${rows || '<tr><td colspan="5"><div class="empty">No transactions recorded yet.</div></td></tr>'}</tbody>
       </table></div>
     </div>
   `;
@@ -788,7 +801,7 @@ function cartAddItem(branch){
   renderPOS(branch);
 }
 function cartRemoveItem(branch, idx){ posCart[branch].splice(idx,1); renderPOS(branch); }
-function cartClear(branch){ posCart[branch]=[]; renderPOS(branch); }
+function cartClear(branch){ posCart[branch]=[]; posCartCat[branch]=''; renderPOS(branch); }
 function saveTransaction(branch){
   const cart=posCart[branch];
   if(!cart.length) return;
@@ -796,10 +809,12 @@ function saveTransaction(branch){
   txList(day,branch).push({
     id:uid(),
     time: nowTimestamp(),
+    category: posCartCat[branch]||'',
     items: cart.map(i=>({menuId:i.menuId, qty:Number(i.qty)})),
     updatedAt: Date.now()
   });
   posCart[branch]=[];
+  posCartCat[branch]='';
   save(); renderPOS(branch); renderTabs();
 }
 
@@ -808,9 +823,17 @@ function startEditTx(branch,id){
   const t=txList(day,branch).find(x=>x.id===id); if(!t) return;
   editingTxId=id;
   editBuffer=JSON.parse(JSON.stringify(t.items||[]));
+  editCategory=t.category||'';
   renderPOS(branch);
 }
-function cancelEditTx(branch){ editingTxId=null; editBuffer=null; renderPOS(branch); }
+function cancelEditTx(branch){ editingTxId=null; editBuffer=null; editCategory=''; renderPOS(branch); }
+function updateTxCategory(branch,id,val){
+  const day=getDay(currentDate);
+  const t=txList(day,branch).find(x=>x.id===id); if(!t) return;
+  t.category=val;
+  t.updatedAt=Date.now();
+  save(); renderPOS(branch);
+}
 function editAddItem(branch){
   if(!state.menus.length) return;
   const menuId=document.getElementById('edit-add-menu-'+branch).value;
@@ -824,10 +847,11 @@ function editUpdateQty(idx, val){ editBuffer[idx].qty=Number(val)||0; }
 function saveEditTx(branch,id){
   const day=getDay(currentDate);
   const t=txList(day,branch).find(x=>x.id===id); if(!t) return;
-  if(!editBuffer.length){ deleteTx(branch,id); editingTxId=null; editBuffer=null; return; }
+  if(!editBuffer.length){ deleteTx(branch,id); editingTxId=null; editBuffer=null; editCategory=''; return; }
   t.items=editBuffer.map(i=>({menuId:i.menuId, qty:Number(i.qty)}));
+  t.category=editCategory||'';
   t.updatedAt=Date.now();
-  editingTxId=null; editBuffer=null;
+  editingTxId=null; editBuffer=null; editCategory='';
   save(); renderPOS(branch);
 }
 function deleteTx(branch,id){
@@ -835,7 +859,7 @@ function deleteTx(branch,id){
   state.tomb.tx.push(id);
   const day=getDay(currentDate);
   if(branch==='1') day.tx1=day.tx1.filter(x=>x.id!==id); else day.tx2=day.tx2.filter(x=>x.id!==id);
-  if(editingTxId===id){ editingTxId=null; editBuffer=null; }
+  if(editingTxId===id){ editingTxId=null; editBuffer=null; editCategory=''; }
   save(); renderPOS(branch);
 }
 
