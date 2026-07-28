@@ -704,6 +704,13 @@ function renderPOS(branch){
   `).join('');
   const cartTotal = cart.reduce((s,i)=>s+(Number(i.qty)||0),0);
 
+  // ── summary: total qty sold per menu item, current day/branch ──
+  const soldByMenu = state.menus.map(m=>({name:m.name, qty:sold(list,m.id)}))
+    .sort((a,b)=>b.qty-a.qty);
+  const soldSummaryRows = soldByMenu.map(r=>`
+    <tr><td>${esc(r.name)}</td><td class="n" style="font-weight:700">${r.qty}</td></tr>
+  `).join('');
+
   const rows = list.slice().reverse().map(t=>{
     if(t.id===editingTxId){
       const bufRows = editBuffer.map((it,idx)=>`
@@ -780,6 +787,14 @@ function renderPOS(branch){
           </div>
         ` : '<div style="font-size:11px;color:var(--faint);margin-top:8px">Add one or more items above, then save them together as one transaction.</div>'}
       </div>
+    </div>
+
+    <div class="card">
+      <div class="card-hdr"><div class="card-title">Qty Sold by Menu Item — ${fmtDate(currentDate)}</div></div>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Menu Item</th><th class="n">Qty Sold</th></tr></thead>
+        <tbody>${soldSummaryRows || '<tr><td colspan="2"><div class="empty">No menu items yet.</div></td></tr>'}</tbody>
+      </table></div>
     </div>
 
     <div class="card">
