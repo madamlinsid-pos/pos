@@ -198,13 +198,13 @@ tbody tr:hover td{background:#fcfbf8}
     <!-- STOCK MASTER (owner) -->
     <div class="panel" id="panel-master">
       <div class="pg-hdr">
-        <div><div class="pg-title">Stock Master</div><div class="pg-sub">Branch 1 (central kitchen) enters today's production, then decides how much goes to Branch 1 and how much goes to Branch 2 — both are set manually, so the remainder is <b>not</b> sent to Branch 2 automatically. Any amount not yet given to either branch shows up as "Unallocated" and automatically rolls into <b>tomorrow's</b> Produced total on top of whatever's newly made — shown as a "+ unallocated" line under Produced below. Any leftover stock from yesterday (based on that branch's opname count) is automatically added on top — shown as "carried B1/B2" badges below. Owner can review or override any of these numbers here too.</div></div>
+        <div><div class="pg-title">Stock Master</div><div class="pg-sub" id="master-sub"></div></div>
       </div>
       <div id="master-notice"></div>
       <div class="card">
         <div class="card-hdr"><div class="card-title">Production & Allocation</div></div>
         <div class="tbl-wrap"><table>
-          <thead><tr><th>Menu</th><th class="n">Produced (pcs)</th><th class="n">Given — Branch 1</th><th class="n">Given — Branch 2</th><th class="n">Unallocated</th><th>Split</th></tr></thead>
+          <thead id="master-thead"></thead>
           <tbody id="master-tbody"></tbody>
         </table></div>
       </div>
@@ -330,6 +330,12 @@ function getDay(dateStr){
   return d;
 }
 let currentDate = todayStr();
+// From this date onward, Branch 1 (central kitchen) no longer uses a manual
+// "Given — Branch 1" allocation. Its stock is computed automatically as
+// carried-in stock + today's production − whatever is sent out to Branch 2.
+// Dates before this cutoff keep using the old three-bucket (Produced/Alloc1/Alloc2) logic untouched.
+const NEW_LOGIC_CUTOFF='2026-07-29';
+function usesNewLogic(dateStr){ return dateStr>=NEW_LOGIC_CUTOFF; }
 
 // ═══════════════════════════════════════════════
 // CALCULATIONS
@@ -369,6 +375,11 @@ function txTotalQty(t){ return (t.items||[]).reduce((s,i)=>s+(Number(i.qty)||0),
 function totalSoldDay(list){ return list.reduce((s,t)=>s+txTotalQty(t),0); }
 function baseQty(dateStr,branch,mId){
   const day=getDay(dateStr);
+  if(branch==='1' && usesNewLogic(dateStr)){
+    // Branch 1 IS the central kitchen: no manual allocation to itself —
+    // its stock is simply what's carried in plus what's produced, minus whatever is sent to Branch 2.
+    return carryIn(dateStr,'1',mId) + produced(day,mId) - alloc2(day,mId);
+  }
   const alloc = branch==='1'?alloc1(day,mId):alloc2(day,mId);
   return alloc + carryIn(dateStr,branch,mId);
 }
@@ -406,6 +417,11 @@ function carryIn(dateStr,branch,mId){
   if(ov!==undefined) return Math.max(0,ov);
   const prev=prevDateStr(dateStr);
   if(!state.days[prev]) return 0;
+  if(branch==='1' && usesNewLogic(dateStr) && !usesNewLogic(prev)){
+    // Seam day: fold the old "unallocated production" pool (which used to roll into
+    // tomorrow's Produced) into Branch 1's carry, since that pool now lives on Branch 1.
+    return Math.max(0, leftover(prev,'1',mId) + unallocated(prev,mId));
+  }
   return Math.max(0, leftover(prev,branch,mId));
 }
 function setCarryOverride(branch,mId,val){
@@ -568,19 +584,20 @@ function renderMaster(){
   const notice=document.getElementById('master-notice');
   notice.innerHTML = state.menus.length? '' : `<div class="notice n-info">No menu items yet. Add them in the <b>Menu Items</b> tab first.</div>`;
   const isOwner = currentUser().role==='owner';
+  const newLogic = usesNewLogic(currentDate);
+
+  document.getElementById('master-sub').innerHTML = newLogic
+    ? `Branch 1 <b>is</b> the central kitchen — its stock is automatic: yesterday's carry-in + today's Produced, minus whatever is sent to Branch 2. Only "Given — Branch 2" is entered manually. Anything not sent out simply stays as Branch 1's own stock and rolls into tomorrow's "Carry B1" automatically. Any leftover stock from yesterday (based on that branch's opname count) is added on top — shown as "carried B1/B2" badges below. Owner can review or override any of these numbers here too.`
+    : `Branch 1 (central kitchen) enters today's production, then decides how much goes to Branch 1 and how much goes to Branch 2 — both are set manually, so the remainder is <b>not</b> sent to Branch 2 automatically. Any amount not yet given to either branch shows up as "Unallocated" and automatically rolls into <b>tomorrow's</b> Produced total on top of whatever's newly made — shown as a "+ unallocated" line under Produced below. Any leftover stock from yesterday (based on that branch's opname count) is automatically added on top — shown as "carried B1/B2" badges below. Owner can review or override any of these numbers here too.`;
+
+  document.getElementById('master-thead').innerHTML = newLogic
+    ? `<tr><th>Menu</th><th class="n">Produced (pcs)</th><th class="n">Branch 1 Stock (auto)</th><th class="n">Given — Branch 2</th><th class="n">Status</th><th>Split</th></tr>`
+    : `<tr><th>Menu</th><th class="n">Produced (pcs)</th><th class="n">Given — Branch 1</th><th class="n">Given — Branch 2</th><th class="n">Unallocated</th><th>Split</th></tr>`;
+
   const tbody=document.getElementById('master-tbody');
   tbody.innerHTML = state.menus.map(m=>{
-    const pRaw=produced(day,m.id), a1=alloc1(day,m.id), a2=alloc2(day,m.id);
-    const pCarry=prodCarryIn(currentDate,m.id);
-    const p=pRaw+pCarry; // effective produced = today's manual entry + yesterday's unallocated leftover
-    const povOv=prodCarryOverrideVal(currentDate,m.id)!==undefined;
-    const unalloc=unallocated(currentDate,m.id);
     const c1=carryIn(currentDate,'1',m.id), c2=carryIn(currentDate,'2',m.id);
     const ov1=carryOverrideVal(currentDate,'1',m.id)!==undefined, ov2=carryOverrideVal(currentDate,'2',m.id)!==undefined;
-    const over = (a1+a2)>p;
-    const pctA1 = p>0? Math.min(100,(a1/p*100)) : 0;
-    const pctA2 = p>0? Math.min(100-pctA1,(a2/p*100)) : 0;
-    const pctUn = Math.max(0,100-pctA1-pctA2);
     const carryBlock = isOwner ? `
       <div style="margin-top:6px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
         <div style="display:flex;align-items:center;gap:4px">
@@ -594,6 +611,49 @@ function renderMaster(){
           ${ov2?`<button class="btn btn-secondary btn-xs" title="Manually set — click to go back to automatic" onclick="resetCarryOverride('2','${m.id}')">↺ auto</button>`:''}
         </div>
       </div>` : ((c1>0||c2>0)?`<div style="margin-top:3px">${c1>0?`<span class="badge b-b1">+${c1} carried B1</span> `:''}${c2>0?`<span class="badge b-b2">+${c2} carried B2</span>`:''}</div>`:'');
+
+    if(newLogic){
+      const pRaw=produced(day,m.id), a2=alloc2(day,m.id);
+      const pool=c1+pRaw;              // total available at Branch 1 before sending anything to Branch 2
+      const stockB1=pool-a2;           // what stays at Branch 1 (its own stock)
+      const over = a2>pool;
+      const pctA2 = pool>0? Math.min(100,(a2/pool*100)) : 0;
+      const pctB1 = Math.max(0,100-pctA2);
+      return `<tr class="${over?'tr-warn':''}">
+        <td>${esc(m.name)}
+          ${carryBlock}
+        </td>
+        <td class="n">
+          <input class="tbl-inp" type="number" min="0" value="${pRaw||''}" placeholder="0" onchange="setProduction('${m.id}',this.value)">
+          ${c1>0?`<div style="font-size:9px;color:var(--faint);margin-top:2px">+${c1} carried in = ${pool} total</div>`:''}
+        </td>
+        <td class="n" style="font-weight:700;color:${stockB1<0?'var(--danger)':'var(--ink)'}">${stockB1}
+          <div style="font-size:9px;font-weight:400;color:var(--faint);margin-top:2px">carry-in + produced − given to B2</div>
+        </td>
+        <td class="n">
+          <input class="tbl-inp" type="number" min="0" value="${a2||''}" placeholder="0" onchange="setAlloc2('${m.id}',this.value)">
+          ${c2>0?`<div style="font-size:9px;color:var(--faint);margin-top:2px">= ${a2+c2} available</div>`:''}
+        </td>
+        <td class="n" style="font-weight:700;color:${over?'var(--danger)':'var(--faint)'}">${over?'Over':'—'}
+          ${over?`<div style="font-size:9px;font-weight:400;color:var(--danger);margin-top:2px">exceeds Branch 1's available stock</div>`:''}
+        </td>
+        <td>
+          <div class="splitbar" title="Branch 1 (kept): ${stockB1} · Branch 2 (given): ${a2}">
+            ${pool>0?`<div class="seg1" style="width:${pctB1}%">${pctB1>=14?stockB1:''}</div><div class="seg2" style="width:${pctA2}%">${pctA2>=14?a2:''}</div>`:''}
+          </div>
+        </td>
+      </tr>`;
+    }
+
+    const pRaw=produced(day,m.id), a1=alloc1(day,m.id), a2=alloc2(day,m.id);
+    const pCarry=prodCarryIn(currentDate,m.id);
+    const p=pRaw+pCarry; // effective produced = today's manual entry + yesterday's unallocated leftover
+    const povOv=prodCarryOverrideVal(currentDate,m.id)!==undefined;
+    const unalloc=unallocated(currentDate,m.id);
+    const over = (a1+a2)>p;
+    const pctA1 = p>0? Math.min(100,(a1/p*100)) : 0;
+    const pctA2 = p>0? Math.min(100-pctA1,(a2/p*100)) : 0;
+    const pctUn = Math.max(0,100-pctA1-pctA2);
     return `<tr class="${over?'tr-warn':''}">
       <td>${esc(m.name)}
         ${carryBlock}
