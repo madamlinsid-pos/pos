@@ -251,6 +251,21 @@ tbody tr:hover td{background:#fcfbf8}
         <thead><tr><th>Name</th><th>Username</th><th>Role</th><th>Password</th><th class="td-acts">Actions</th></tr></thead>
         <tbody id="users-tbody"></tbody>
       </table></div></div>
+
+      <div class="pg-hdr" style="margin-top:22px"><div><div class="pg-title" style="font-size:15px">Employee Names</div><div class="pg-sub">Add names for staff who do physical stock counts (Stock Opname) but don't need their own login. They'll show up in the "Counted by" dropdown for the branch you assign them to.</div></div></div>
+      <div class="card"><div class="card-body">
+        <div class="form-row">
+          <div class="fld"><label>Name</label><input id="ne-name" placeholder="Employee name"></div>
+          <div class="fld"><label>Branch</label>
+            <select id="ne-branch"><option value="branch1">Branch 1</option><option value="branch2">Branch 2</option><option value="both">Both branches</option></select>
+          </div>
+          <button class="btn btn-primary" onclick="addEmployee()">+ Add Employee</button>
+        </div>
+      </div></div>
+      <div class="card"><div class="tbl-wrap"><table>
+        <thead><tr><th>Name</th><th>Branch</th><th class="td-acts">Actions</th></tr></thead>
+        <tbody id="employees-tbody"></tbody>
+      </table></div></div>
     </div>
 
     <!-- BACKUP & SYNC (owner) -->
@@ -299,8 +314,11 @@ function todayStr(){ const d=new Date(); const p=n=>String(n).padStart(2,'0'); r
 function uid(){ return Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4); }
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
-function defaultState(){ return { businessName:'', users:[], menus:[], days:{}, tomb:{menu:[],user:[],tx:[]} }; }
+function defaultState(){ return { businessName:'', users:[], employees:[], menus:[], days:{}, tomb:{menu:[],user:[],tx:[],employee:[]} }; }
 let state = loadState();
+state.employees = state.employees || [];
+state.tomb = state.tomb || {menu:[],user:[],tx:[],employee:[]};
+state.tomb.employee = state.tomb.employee || [];
 function loadState(){
   try{ const r=localStorage.getItem(SK); if(r) return Object.assign(defaultState(), JSON.parse(r)); }catch(e){}
   return defaultState();
@@ -954,7 +972,11 @@ function getDiscrepancies(dateStr,branch){
 }
 function usersForOpname(branch){
   const role='branch'+branch;
-  return state.users.filter(u=>u.role===role || u.role==='owner');
+  const loginUsers = state.users.filter(u=>u.role===role || u.role==='owner')
+    .map(u=>({id:'user:'+u.id, name:u.name, tag:u.role==='owner'?' (Owner)':''}));
+  const employees = state.employees.filter(e=>e.branch===role || e.branch==='both')
+    .map(e=>({id:'emp:'+e.id, name:e.name, tag:''}));
+  return [...loginUsers, ...employees];
 }
 function renderOpname(branch){
   const panel=document.getElementById('panel-opname'+branch);
@@ -983,7 +1005,7 @@ function renderOpname(branch){
     </tr>`;
   }).join('');
   const employeeOptions = `<option value="">— select employee —</option>` +
-    eligible.map(u=>`<option value="${u.id}" ${by&&by.employeeId===u.id?'selected':''}>${esc(u.name)}${u.role==='owner'?' (Owner)':''}</option>`).join('');
+    eligible.map(u=>`<option value="${u.id}" ${by&&by.employeeId===u.id?'selected':''}>${esc(u.name)}${u.tag}</option>`).join('');
   const whoBlock = `
     <div class="card"><div class="card-body">
       <div class="form-row" style="align-items:flex-end">
@@ -1023,9 +1045,16 @@ function setOpnameBy(branch,userId){
   const day=getDay(currentDate);
   const byKey = branch==='1'?'opnameBy1':'opnameBy2';
   if(!userId){ day[byKey]=null; save(); renderOpname(branch); return; }
-  const u=state.users.find(x=>x.id===userId);
-  if(!u) return;
-  day[byKey] = { employeeId:u.id, employeeName:u.name, at:Date.now() };
+  let name=null;
+  if(userId.startsWith('user:')){
+    const u=state.users.find(x=>x.id===userId.slice(5));
+    if(u) name=u.name;
+  } else if(userId.startsWith('emp:')){
+    const e=state.employees.find(x=>x.id===userId.slice(4));
+    if(e) name=e.name;
+  }
+  if(!name) return;
+  day[byKey] = { employeeId:userId, employeeName:name, at:Date.now() };
   save(); renderOpname(branch);
 }
 // ── owner-facing history: which employee counted stock on which day ──
@@ -1082,6 +1111,31 @@ function renderUsers(){
       <button class="btn btn-secondary btn-xs" onclick="editUserPass('${u.id}')">Reset password</button>
       ${u.role!=='owner'?`<button class="btn btn-danger btn-xs" onclick="deleteUser('${u.id}')">Remove</button>`:''}
     </td></tr>`).join('');
+  renderEmployees();
+}
+function employeeBranchLabel(b){ return b==='branch1'?'Branch 1':b==='branch2'?'Branch 2':'Both branches'; }
+function addEmployee(){
+  const name=document.getElementById('ne-name').value.trim();
+  const branch=document.getElementById('ne-branch').value;
+  if(!name){ alert('Please enter a name.'); return; }
+  state.employees.push({id:uid(), name, branch, updatedAt:Date.now()});
+  document.getElementById('ne-name').value='';
+  save(); renderEmployees();
+}
+function deleteEmployee(id){
+  const e=state.employees.find(x=>x.id===id); if(!e) return;
+  if(!confirm(`Remove employee "${e.name}"?`)) return;
+  state.employees=state.employees.filter(x=>x.id!==id);
+  state.tomb.employee.push(id);
+  save(); renderEmployees();
+}
+function renderEmployees(){
+  const tbody=document.getElementById('employees-tbody');
+  if(!tbody) return;
+  tbody.innerHTML = state.employees.map(e=>`
+    <tr><td>${esc(e.name)}</td><td>${employeeBranchLabel(e.branch)}</td>
+    <td class="td-acts"><button class="btn btn-danger btn-xs" onclick="deleteEmployee('${e.id}')">Remove</button></td></tr>`).join('')
+    || `<tr><td colspan="3"><div class="empty"><div class="empty-title">No employee names added yet</div></div></td></tr>`;
 }
 
 // ═══════════════════════════════════════════════
@@ -1102,6 +1156,9 @@ function importData(evt){
       const parsed=JSON.parse(reader.result);
       if(!confirm('Import this backup? It will replace all current data in this browser.')) return;
       state=Object.assign(defaultState(), parsed);
+      state.employees = state.employees || [];
+      state.tomb = state.tomb || {menu:[],user:[],tx:[],employee:[]};
+      state.tomb.employee = state.tomb.employee || [];
       save();
       alert('Backup imported.');
       boot();
@@ -1175,16 +1232,18 @@ function mergeDay(l,r,tombTxSet){
 function mergeState(local, remote){
   if(!remote || typeof remote!=='object' || Object.keys(remote).length===0) return local;
   const merged = JSON.parse(JSON.stringify(local));
-  const rtomb = remote.tomb || {menu:[],user:[],tx:[]};
-  merged.tomb = merged.tomb || {menu:[],user:[],tx:[]};
+  const rtomb = remote.tomb || {menu:[],user:[],tx:[],employee:[]};
+  merged.tomb = merged.tomb || {menu:[],user:[],tx:[],employee:[]};
   merged.tomb.menu = Array.from(new Set([...(merged.tomb.menu||[]), ...(rtomb.menu||[])]));
   merged.tomb.user = Array.from(new Set([...(merged.tomb.user||[]), ...(rtomb.user||[])]));
   merged.tomb.tx = Array.from(new Set([...(merged.tomb.tx||[]), ...(rtomb.tx||[])]));
+  merged.tomb.employee = Array.from(new Set([...(merged.tomb.employee||[]), ...(rtomb.employee||[])]));
 
   if(!merged.businessName && remote.businessName) merged.businessName = remote.businessName;
 
   merged.menus = mergeRecords(merged.menus, remote.menus, merged.tomb.menu);
   merged.users = mergeRecords(merged.users, remote.users, merged.tomb.user);
+  merged.employees = mergeRecords(merged.employees||[], remote.employees, merged.tomb.employee);
   if(!merged.users.find(u=>u.role==='owner')){
     const remoteOwner = (remote.users||[]).find(u=>u.role==='owner');
     if(remoteOwner) merged.users.push(remoteOwner);
