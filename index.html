@@ -779,7 +779,8 @@ function renderPOS(branch){
 
   const stockRows = state.menus.map(m=>{
     const rem=remaining(currentDate,branch,m.id);
-    return `<div class="stat"><div class="stat-lbl">${esc(m.name)}</div><div class="stat-val" style="${rem<0?'color:var(--danger)':''}">${rem}</div><div class="stat-sub">remaining</div></div>`;
+    const low = rem<15;
+    return `<div class="stat" style="${low?'background:var(--danger);border-color:var(--danger)':''}"><div class="stat-lbl" style="${low?'color:#fff':''}">${esc(m.name)}</div><div class="stat-val" style="${low?'color:#fff':(rem<0?'color:var(--danger)':'')}">${rem}</div><div class="stat-sub" style="${low?'color:rgba(255,255,255,0.85)':''}">remaining</div></div>`;
   }).join('');
 
   // ── cart builder for a brand-new transaction ──
